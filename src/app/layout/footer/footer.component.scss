@@ -1,0 +1,23 @@
+// Definición del color negro para el footer (si no usas directamente bg-dark de Bootstrap)
+$footer-bg: #000000;
+$contact-link: #ffcc00; // Un amarillo visible (o usa text-warning de Bootstrap)
+
+// Estilo del contenedor principal del footer
+footer {
+    background-color: $footer-bg !important;
+}
+
+// Estilo para el link de contacto (si no usas text-warning)
+.text-warning {
+    color: $contact-link !important;
+}
+
+// Estilo para los elementos de la lista de navegación
+.list-unstyled a:hover {
+    color: $contact-link !important; // Efecto hover
+}
+
+// Estilo de la línea divisoria
+hr {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}

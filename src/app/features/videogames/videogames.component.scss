@@ -1,0 +1,10 @@
+/* Estilos para el divisor debajo del título "VIDEOJUEGOS" */
+.gamezone-divider {
+    border: none; /* Eliminar el borde predeterminado del navegador */
+    border-top: 3px solid #333; /* Color y grosor de la línea */
+    opacity: 0.8; /* Ligeramente transparente si quieres un efecto suave */
+    margin-bottom: 2rem; /* Espacio debajo de la línea */
+    width: 100%; /* Asegurar que ocupe todo el ancho disponible */
+    max-width: 250px; /* Limitar el ancho como en tu diseño de Figma */
+    margin-left: 0; /* Asegurar que se alinee a la izquierda (si el offset lo permite) */
+}

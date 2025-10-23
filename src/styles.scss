@@ -1,1 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+/* * Estilos Globales para Game-Zone 
+ * ================================
+ */
+@import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
+// 1. Opcional: Definición de variables globales (sobrescribir Bootstrap)
+$primary: #ff5733; // Un color de énfasis gamer (ejemplo)
+$dark: #1e3f56;    // Color azul oscuro de la caja de "Sobre Game Zone"
+
+// 🔥 AÑADIR EL COLOR DE FONDO DE LA PÁGINA
+$gamezone-beige: #FFF8E4; 
+
+
+$font-family-gamezone: 'Krona One', sans-serif;
+
+body {
+    background-color: $gamezone-beige !important; 
+}
+
+// Clase personalizada para el fondo del Navbar que debe coincidir
+.bg-gamezone-light {
+    background-color: $gamezone-beige !important;
+}
+
+// 2. Importación de Bootstrap (¡Indispensable!)
+@import 'bootstrap/scss/bootstrap'; 
+
+/* Puedes añadir más estilos de utilidad global aquí si lo necesitas */

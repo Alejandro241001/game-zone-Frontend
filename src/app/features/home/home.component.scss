@@ -1,0 +1,65 @@
+// Estilos para la sección Hero / Jumbotron
+.hero-header {
+    height: 100vh; 
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    
+    // 🔥 IMAGEN DEL COLAGE: Usando tu nombre de archivo
+    background-image: url('../../assets/collage-videojuegos.jpg');
+    
+    
+    // Overlay semi-transparente para oscurecer la imagen de fondo y permitir que el Header transparente se integre
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        // Levemente más oscuro para el contraste del logo
+        background-color: rgba(0, 0, 0, 0.2); 
+    }
+    
+    .hero-content {
+        z-index: 10; 
+        position: relative; 
+    }
+}
+
+// ... (resto de los estilos del .hero-header) ...
+
+.logo-container {
+    background-color: white; 
+    padding: 30px 50px; /* Mantén el padding para el espacio alrededor del logo */
+    border-radius: 5px; 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.hero-main-logo {
+   /* Ajusta este valor si es necesario */
+    max-width: 120px !important; 
+    height: auto !important;
+}
+
+// Estilos para la sección "SOBRE GAME ZONE"
+.about-gamezone-box {
+    // 🔥 COLOR AZUL MARINO
+    background-color: #1e3f56; 
+    
+    // 🔥 BORDES REDONDEADOS FUERTES (rounded-5 de Bootstrap es similar a 1rem o más)
+    border-radius: 2.5rem !important; // Más redondeado que un simple rounded-3
+    
+    // Relleno interior para que el texto no toque el borde
+    padding: 3rem 4rem !important; 
+    
+    // Asegurar que el texto sea grande como se ve en la captura
+    .lead {
+        font-size: 1.25rem;
+        line-height: 1.8;
+    }
+}

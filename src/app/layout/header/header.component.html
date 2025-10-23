@@ -1,0 +1,14 @@
+<header class="main-header">
+    <div class="logo">
+        <a routerLink="/"></a>
+        <img class="imagen logo" src="public\assets\logo.png" >
+    </div>
+    <nav class="navigation">
+        <ul class="nav-links">
+            <li><a routerLink="/">Inicio</a></li>
+            <li><a routerLink="/videogames">Videojuegos</a></li>
+            <li><a routerLink="/login">Iniciar sesion</a></li>
+            <li *ngIf="isLoggedIn"><a (click)="logout()">Cerrar sesión</a></li>
+        </ul>
+    </nav>
+</header>
