@@ -36,6 +36,7 @@ solicitud es exitosa.
   */ 
  setToken(token: string): void { 
    this.token.next(token); // Actualiza el valor del token. 
+   localStorage.setItem('token', token); // 💾 guarda el token
  } 
  
  /** 
@@ -43,7 +44,9 @@ solicitud es exitosa.
   * @returns El token actual o null si no está definido. 
   */ 
  getToken(): string | null { 
+  const currentToken = this.token.value || localStorage.getItem('token');
    return this.token.value; 
+   
  } 
  
  /** 
@@ -63,5 +66,39 @@ existencia del token.
  logout(): void { 
    this.token.next(null); // Limpia el token almacenado. 
    this.router.navigate(['/']); // Redirige al usuario a la ruta raíz. 
+   localStorage.removeItem('token'); // 🧹 limpia almacenamiento
  } 
+
+ /**
+ * Decodifica el JWT para obtener la información del usuario (ej. rol).
+ */
+private decodeToken(token: string): any | null {
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload));
+  } catch (e) {
+    console.error('Error decodificando token:', e);
+    return null;
+  }
+}
+
+/**
+ * Obtiene el rol actual del usuario logueado.
+ * @returns string | null
+ */
+getUserRole(): string | null {
+  const token = this.getToken();
+  if (!token) return null;
+
+  const decoded = this.decodeToken(token);
+  // 👇 Ajusta el nombre del claim según tu backend (por ejemplo: "role", "roles", "authorities")
+  return decoded?.role || decoded?.roles?.[0] || null;
+}
+
+/**
+ * Verifica si el usuario logueado es manager.
+ */
+isManager(): boolean {
+  return this.getUserRole() === 'MANAGER' || this.getUserRole() === 'ROLE_MANAGER';
+}
 } 

@@ -1,0 +1,28 @@
+.videogame-detail-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.detail-image {
+  max-width: 100%;
+  border-radius: 1rem;
+}
+
+.gamezone-divider {
+  border: none;
+  border-top: 3px solid #333;
+  opacity: 0.8;
+  margin-bottom: 1.5rem;
+  max-width: 250px;
+}
+
+h1 {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.btn-secondary {
+  border-radius: 10px;
+}
