@@ -117,22 +117,33 @@ private decodeToken(token: string): any | null {
  * @returns string | null
  */
 getUserRole(): string | null {
-  const token = this.getToken();
-  if (!token) return null;
+  const token = this.getToken();
+  if (!token) return null;
 
-  const decoded = this.decodeToken(token);
-  // Ajusta el nombre del claim según tu backend (por ejemplo: "role", "roles", "authorities")
-  const role = decoded?.role || decoded?.roles?.[0] || decoded?.authorities?.[0]?.authority || null;
-   // Si el rol viene como "ROLE_MANAGER", quitamos el prefijo
-   return role ? role.replace('ROLE_', '') : null;
+  const decoded = this.decodeToken(token);
+  const role =
+    decoded?.role ||
+    decoded?.roles?.[0] ||
+    decoded?.authorities?.[0]?.authority ||
+    null;
+
+  // 🔹 Normaliza el formato (quita prefijos tipo "ROLE_" y pasa a mayúsculas)
+  return role ? role.replace('ROLE_', '').toUpperCase() : null;
 }
 
 /**
  * Verifica si el usuario logueado es manager (o admin).
  */
 isManager(): boolean {
-   const role = this.getUserRole();
-   return role === 'MANAGER' || role === 'ADMIN'; // Verifica si es Manager o Admin
+  const role = this.getUserRole();
+  return role === 'MANAGER'; // ✅ Solo managers, no admins
 }
+
+isAdmin(): boolean {
+  const role = this.getUserRole();
+  return role === 'ADMIN';
+}
+
+
 
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { VideogameDetailService, VideoGame, Studio, Platform } from '../../core/services/videogame-detail.service';
+import { VideogameDetailService, VideoGame, Studio, Platform, Genre } from '../../core/services/videogame-detail.service';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -19,12 +19,16 @@ export class VideogameCreateComponent implements OnInit {
     releaseYear: new Date().getFullYear(),
     metacritic: 0,
     img: '',
-    studioId: null,
-    platforms: []
+    studioId: null
   };
 
   studios: Studio[] = [];
   platforms: Platform[] = [];
+  genres: Genre[] = [];
+
+  selectedPlatformIds: number[] = [];
+  selectedGenreIds: number[] = [];
+
   message: string | null = null;
 
   constructor(
@@ -36,20 +40,48 @@ export class VideogameCreateComponent implements OnInit {
   ngOnInit(): void {
     // 🔹 Cargar estudios
     this.videogameService.fetchStudios().subscribe({
-      next: (data) => {
-        this.studios = data;
-        console.log('📚 Estudios cargados:', this.studios);
-      },
+      next: (data) => this.studios = data,
       error: (err) => console.error('Error al cargar estudios:', err)
     });
 
     // 🔹 Cargar plataformas
     this.videogameService.fetchPlatforms().subscribe({
-      next: (data) => this.platforms = data,
-      error: (err) => console.error('Error al cargar plataformas:', err)
+      next: (data) => {
+        this.platforms = data;
+        console.log('🧩 Plataformas cargadas correctamente:', this.platforms);
+      },
+      error: (err) => console.error('❌ Error al cargar plataformas:', err)
+    });
+
+    // 🔹 Cargar géneros
+    this.videogameService.fetchGenres().subscribe({
+      next: (data) => {
+        this.genres = data;
+        console.log('🎭 Géneros cargados correctamente:', this.genres);
+      },
+      error: (err) => console.error('❌ Error al cargar géneros:', err)
     });
   }
 
+  // ✅ Manejar selección de plataformas (checkbox)
+  onPlatformToggle(platformId: number, event: any): void {
+    if (event.target.checked) {
+      this.selectedPlatformIds.push(platformId);
+    } else {
+      this.selectedPlatformIds = this.selectedPlatformIds.filter(id => id !== platformId);
+    }
+  }
+
+  // ✅ Manejar selección de géneros (checkbox)
+  onGenreToggle(genreId: number, event: any): void {
+    if (event.target.checked) {
+      this.selectedGenreIds.push(genreId);
+    } else {
+      this.selectedGenreIds = this.selectedGenreIds.filter(id => id !== genreId);
+    }
+  }
+
+  // ✅ Crear videojuego
   createVideogame(): void {
     if (!this.authService.isManager()) {
       this.message = '❌ Solo los MANAGER pueden crear videojuegos.';
@@ -57,11 +89,10 @@ export class VideogameCreateComponent implements OnInit {
     }
 
     if (!this.newVideogame.name || !this.newVideogame.description || !this.newVideogame.studioId) {
-      this.message = '⚠️ Debes completar todos los campos obligatorios (nombre, descripción y estudio).';
+      this.message = '⚠️ Debes completar los campos obligatorios (nombre, descripción y estudio).';
       return;
     }
 
-    // ✅ Convertimos correctamente los tipos (Java espera números reales)
     const gameDTO = {
       name: this.newVideogame.name,
       description: this.newVideogame.description,
@@ -69,10 +100,11 @@ export class VideogameCreateComponent implements OnInit {
       metacritic: Number(this.newVideogame.metacritic),
       releaseYear: Number(this.newVideogame.releaseYear),
       img: this.newVideogame.img,
-      platformIds: this.newVideogame.platforms?.map((p: any) => Number(p.id)) || []
+      platformIds: this.selectedPlatformIds,
+      genreIds: this.selectedGenreIds
     };
 
-    console.log('📦 Enviando DTO al backend:', JSON.stringify(gameDTO, null, 2));
+    console.log('📦 Enviando DTO:', JSON.stringify(gameDTO, null, 2));
 
     this.videogameService.createVideogame(gameDTO).subscribe({
       next: (created: VideoGame) => {

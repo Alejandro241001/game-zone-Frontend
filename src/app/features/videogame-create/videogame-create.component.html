@@ -6,16 +6,19 @@
       <div *ngIf="message" class="alert alert-info text-center">{{ message }}</div>
 
       <form (ngSubmit)="createVideogame()" #gameForm="ngForm">
+        <!-- Nombre -->
         <div class="mb-3">
           <label class="form-label fw-bold">Nombre</label>
           <input type="text" class="form-control" [(ngModel)]="newVideogame.name" name="name" required>
         </div>
 
+        <!-- Descripción -->
         <div class="mb-3">
           <label class="form-label fw-bold">Descripción</label>
           <textarea class="form-control" [(ngModel)]="newVideogame.description" name="description" rows="3" required></textarea>
         </div>
 
+        <!-- Año y Metacritic -->
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label fw-bold">Año de lanzamiento</label>
@@ -27,20 +30,46 @@
           </div>
         </div>
 
+        <!-- Imagen -->
         <div class="mb-3">
           <label class="form-label fw-bold">Imagen (nombre del archivo)</label>
           <input type="text" class="form-control" [(ngModel)]="newVideogame.img" name="img">
         </div>
 
-        <!-- ✅ Estudio: ahora usa studioId directamente -->
+        <!-- Estudio -->
         <div class="mb-3">
-  <label class="form-label fw-bold">Estudio</label>
-  <select [(ngModel)]="newVideogame.studioId" name="studioId" class="form-control" required>
-    <option value="" disabled selected>Seleccione un estudio</option>
-    <option *ngFor="let studio of studios" [value]="studio.id">{{ studio.name }}</option>
-  </select>
+          <label class="form-label fw-bold">Estudio</label>
+          <select [(ngModel)]="newVideogame.studioId" name="studioId" class="form-control" required>
+            <option value="" disabled selected>Seleccione un estudio</option>
+            <option *ngFor="let studio of studios" [value]="studio.id">{{ studio.name }}</option>
+          </select>
+        </div>
+
+        <!-- 🔹 Plataformas -->
+<div class="mb-3">
+  <label class="form-label fw-bold">Plataformas</label>
+  <div class="form-check" *ngFor="let platform of platforms">
+    <input class="form-check-input"
+           type="checkbox"
+           [value]="platform.id"
+           (change)="onPlatformToggle(platform.id, $event)">
+    <label class="form-check-label">{{ platform.name }}</label>
+  </div>
 </div>
 
+<!-- 🔹 Géneros -->
+<div class="mb-3">
+  <label class="form-label fw-bold">Géneros</label>
+  <div class="form-check" *ngFor="let genre of genres">
+    <input class="form-check-input"
+           type="checkbox"
+           [value]="genre.id"
+           (change)="onGenreToggle(genre.id, $event)">
+    <label class="form-check-label">{{ genre.name }}</label>
+  </div>
+</div>
+
+        <!-- Botones -->
         <div class="d-flex justify-content-between mt-4">
           <button type="button" class="btn btn-secondary" (click)="router.navigate(['/videogames'])">← Volver</button>
           <button type="submit" class="btn btn-primary" [disabled]="!gameForm.form.valid">💾 Crear videojuego</button>

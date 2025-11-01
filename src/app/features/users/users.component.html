@@ -1,0 +1,42 @@
+<div class="container mt-4">
+  <h2 class="mb-3 text-center">👥 Miembros</h2>
+
+  <div *ngIf="message" class="alert alert-info text-center">{{ message }}</div>
+
+  <div *ngIf="loading" class="text-center">
+    <p>Cargando usuarios...</p>
+  </div>
+
+  <table *ngIf="!loading && users.length > 0" class="table table-striped text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>Usuario</th>
+        <th>Nombre</th>
+        <th>Rol</th>
+        <th>Fecha de creación</th>
+        <th>Activo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.username }}</td>
+        <td>{{ user.firstName }} {{ user.lastName }}</td>
+        <td>{{ (user.roles?.[0]?.name || 'Sin rol')!.replace('ROLE_', '') }}</td>
+        <td>{{ user.createdDate | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <button (click)="toggleStatus(user)" class="btn btn-sm" [ngClass]="user.enabled ? 'btn-success' : 'btn-warning'">
+            {{ user.enabled ? 'Activo' : 'Inactivo' }}
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-danger btn-sm" (click)="deleteUser(user)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && users.length === 0" class="text-center">
+    <p>No hay usuarios registrados.</p>
+  </div>
+</div>
