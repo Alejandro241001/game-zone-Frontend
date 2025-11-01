@@ -5,6 +5,7 @@ import { LoginComponent } from './features/login/login.component';
 import { HomeComponent } from './features/home/home.component';
 import { ForbiddenComponent } from './features/forbidden/forbidden.component';
 import { Error404Component } from './features/error404/error404.component';
+import { VideogameCreateComponent } from './features/videogame-create/videogame-create.component';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -20,10 +21,12 @@ export const routes: Routes = [
     path: 'videogames', // Página que lista todos los videojuegos
     component: VideogamesComponent,
   },
+  { path: 'videogames/new', component: VideogameCreateComponent }, 
   {
     path: 'videogames/:id', // ✅ Nueva ruta para el detalle de un videojuego
     component: VideogameDetailComponent,
   },
+  
   {
     path: 'forbidden', // Página 403
     component: ForbiddenComponent,

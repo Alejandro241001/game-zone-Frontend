@@ -1,20 +1,35 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 
-// Define la interfaz del videojuego (puedes importarla si ya existe)
+export interface Studio {
+  id: number;
+  name: string;
+}
+
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export interface Platform {
+  id: number;
+  name: string;
+}
+
 export interface VideoGame {
   id: number;
   name: string;
-  studio: { name: string };
+  description: string;
   releaseYear: number;
   metacritic: number;
-  genres: { name: string }[];
-  description?: string;
-  platforms: any[];
-  reviews: any[];
   img: string;
+  studio?: Studio;
+  genres?: Genre[];
+  platforms?: Platform[];
 }
 
 @Injectable({
@@ -22,21 +37,74 @@ export interface VideoGame {
 })
 export class VideogameDetailService {
 
-  private apiUrl = 'http://localhost:8080/api/videogames'; // Ajusta la URL si es diferente en tu backend
+  private apiUrl = `${environment.apiUrl}/videogames`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  /**
-   * Obtiene los detalles de un videojuego por su ID
-   * Ejemplo de llamada: GET http://localhost:8080/api/videogames/5
-   */
+  /** 🎮 Obtener videojuego por ID */
   fetchVideogameById(id: number): Observable<VideoGame> {
     return this.http.get<VideoGame>(`${this.apiUrl}/${id}`);
   }
 
-  updateVideogame(id: number, updatedData: Partial<VideoGame>) {
+  /** 💾 Actualizar videojuego */
+  updateVideogame(id: number, videogame: VideoGame): Observable<VideoGame> {
     const token = this.authService.getToken();
-    const headers = token ? { Authorization: `Bearer ${token}` } : {};
-  return this.http.put<VideoGame>(`http://localhost:8080/api/videogames/${id}`, updatedData);
-}
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    });
+
+    const gameDTO = {
+      name: videogame.name,
+      description: videogame.description,
+      studioId: videogame.studio?.id,
+      metacritic: videogame.metacritic,
+      releaseYear: videogame.releaseYear,
+      img: videogame.img,
+      platformIds: videogame.platforms?.map(p => p.id) || []
+    };
+
+    return this.http.put<VideoGame>(`${this.apiUrl}/${id}`, gameDTO, { headers });
+  }
+
+  /** 🗑️ Eliminar videojuego */
+  deleteVideogame(id: number): Observable<void> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers });
+  }
+
+  /** ➕ Crear nuevo videojuego */
+  createVideogame(gameDTO: any): Observable<VideoGame> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    });
+    console.log('📤 POST a backend:', gameDTO);
+    return this.http.post<VideoGame>(`${this.apiUrl}`, gameDTO, { headers });
+  }
+
+  /** 🏭 Traer estudios (maneja Page<StudioDTO>) */
+  fetchStudios(): Observable<Studio[]> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+    return this.http
+      .get<{ content: Studio[] }>(`${environment.apiUrl}/studios`, { headers })
+      .pipe(map(response => response.content || []));
+  }
+
+  /** 💻 Traer plataformas (maneja Page<PlatformDTO>) */
+  fetchPlatforms(): Observable<Platform[]> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+    return this.http
+      .get<{ content: Platform[] }>(`${environment.apiUrl}/platforms`, { headers })
+      .pipe(map(response => response.content || []));
+  }
 }

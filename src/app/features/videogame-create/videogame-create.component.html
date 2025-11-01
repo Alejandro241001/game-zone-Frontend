@@ -1,0 +1,51 @@
+<div class="container mt-5">
+  <div class="col-md-8 offset-md-2">
+    <div class="card shadow-sm p-4">
+      <h2 class="mb-3 text-center">➕ Añadir nuevo videojuego</h2>
+
+      <div *ngIf="message" class="alert alert-info text-center">{{ message }}</div>
+
+      <form (ngSubmit)="createVideogame()" #gameForm="ngForm">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="newVideogame.name" name="name" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Descripción</label>
+          <textarea class="form-control" [(ngModel)]="newVideogame.description" name="description" rows="3" required></textarea>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Año de lanzamiento</label>
+            <input type="number" class="form-control" [(ngModel)]="newVideogame.releaseYear" name="releaseYear" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Metacritic</label>
+            <input type="number" class="form-control" [(ngModel)]="newVideogame.metacritic" name="metacritic" min="0" max="100" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Imagen (nombre del archivo)</label>
+          <input type="text" class="form-control" [(ngModel)]="newVideogame.img" name="img">
+        </div>
+
+        <!-- ✅ Estudio: ahora usa studioId directamente -->
+        <div class="mb-3">
+  <label class="form-label fw-bold">Estudio</label>
+  <select [(ngModel)]="newVideogame.studioId" name="studioId" class="form-control" required>
+    <option value="" disabled selected>Seleccione un estudio</option>
+    <option *ngFor="let studio of studios" [value]="studio.id">{{ studio.name }}</option>
+  </select>
+</div>
+
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-secondary" (click)="router.navigate(['/videogames'])">← Volver</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!gameForm.form.valid">💾 Crear videojuego</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
