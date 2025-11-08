@@ -1,0 +1,58 @@
+<div class="container mt-5">
+  <div class="col-md-8 offset-md-2">
+    <div class="card shadow-sm p-4">
+      <h2 class="mb-3 text-center">🏢 Añadir nuevo estudio</h2>
+
+      <div *ngIf="message" class="alert alert-info text-center">{{ message }}</div>
+
+      <form (ngSubmit)="createStudio()" #studioForm="ngForm">
+        <!-- Nombre -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Nombre del estudio</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="newStudio.name"
+            name="name"
+            required
+          />
+        </div>
+
+        <!-- País -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">País</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="newStudio.country"
+            name="country"
+            required
+          />
+        </div>
+
+        <!-- Imagen -->
+        <div class="mb-3">
+          <label class="form-label fw-bold">Imagen (nombre del archivo)</label>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="newStudio.img"
+            name="img"
+            placeholder="ej. nintendo.png"
+          />
+          <small class="text-muted">Debe existir en <code>/img</code> del backend</small>
+        </div>
+
+        <!-- Botones -->
+        <div class="d-flex justify-content-between mt-4">
+          <button type="button" class="btn btn-secondary" (click)="router.navigate(['/studios'])">
+            ← Volver
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="!studioForm.form.valid">
+            💾 Crear estudio
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

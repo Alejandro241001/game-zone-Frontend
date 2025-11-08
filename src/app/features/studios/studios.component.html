@@ -1,0 +1,57 @@
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>🎬 ESTUDIOS</h1>
+        <button *ngIf="isManager" class="btn btn-primary" [routerLink]="['/studios/new']">
+          ➕ Añadir estudio
+        </button>
+      </div>
+
+      <hr class="gamezone-divider">
+
+      <div *ngIf="message" class="alert alert-info text-center">{{ message }}</div>
+
+      <div *ngIf="!studios || studios.length === 0" class="alert alert-info mt-5">
+        No hay estudios disponibles.
+      </div>
+
+      <div class="row">
+        <div class="col-6 col-sm-4 col-lg-3 mb-4" *ngFor="let studio of studios">
+          <div class="card card-studio text-center shadow-sm position-relative">
+
+            <!-- Imagen del estudio -->
+            <img class="card-img-top img-fluid p-2"
+              [src]="'http://localhost:8080/img/' + (studio.img ? studio.img : 'default-studio.png')"
+              [alt]="studio.name"
+              (error)="onImageError($event)"
+>
+
+            <div class="card-body">
+              <h6 class="card-title fw-bold">{{ studio.name }}</h6>
+              <p class="text-muted small mb-1 d-flex align-items-center justify-content-center">
+                <img class="flag me-1" src="http://localhost:8080/img/{{ getCountryFlag(studio.country) }}"
+                  alt="{{ studio.country }}" onerror="this.style.display='none'" width="22">
+                {{ studio.country }}
+              </p>
+
+              <!-- 🔹 Botones de acción visibles solo para managers -->
+              <div *ngIf="isManager" class="d-flex justify-content-center mt-2">
+                <button class="btn btn-outline-warning btn-sm me-2"
+                  (click)="router.navigate(['/studios/edit', studio.id])">
+                  ✏️ Editar
+                </button>
+
+                <button class="btn btn-outline-danger btn-sm" (click)="deleteStudio(studio.id)">
+                  🗑️ Eliminar
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

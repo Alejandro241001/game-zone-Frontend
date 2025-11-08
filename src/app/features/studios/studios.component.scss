@@ -1,0 +1,28 @@
+.card-studio {
+    background-color: #004c5a;
+    color: white;
+    border-radius: 15px;
+    padding: 10px;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 110px;
+        object-fit: contain;
+        background-color: white;
+        border-radius: 10px;
+    }
+
+    .flag {
+        width: 28px;
+        /* antes estaba en 20px o 24px */
+        height: 20px;
+        vertical-align: middle;
+    }
+}

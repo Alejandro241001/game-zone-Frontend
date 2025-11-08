@@ -1,19 +1,22 @@
 <header class="main-header">
   <div class="logo">
-    <a routerLink="/"></a>
-    <img class="imagen logo" src="assets/logo.png" alt="Game Zone Logo">
+    <a routerLink="/">
+      <img class="imagen logo" src="assets/logo.png" alt="Game Zone Logo">
+    </a>
   </div>
 
   <nav class="navigation">
     <ul class="nav-links">
       <li><a routerLink="/">Inicio</a></li>
       <li><a routerLink="/videogames">Videojuegos</a></li>
+      <li *ngIf="isLoggedIn"><a routerLink="/studios">Estudios</a></li><!-- 🧩 Nueva pestaña visible para todos -->
 
       <!-- 🔥 SOLO visible si el rol es ADMIN -->
       <li *ngIf="isAdmin"><a routerLink="/users">Usuarios</a></li>
 
       <!-- 🔑 Si NO está logueado -->
       <li *ngIf="!isLoggedIn"><a routerLink="/login">Iniciar sesión</a></li>
+      <li *ngIf="!isLoggedIn"><a routerLink="/register">Registrarse</a></li>
 
       <!-- 🚪 Si SÍ está logueado -->
       <li *ngIf="isLoggedIn"><a (click)="logout()">Cerrar sesión</a></li>

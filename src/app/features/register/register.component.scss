@@ -1,0 +1,116 @@
+/* Contenedor principal */
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background-color: #fff8e4; /* Fondo crema */
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Tarjeta del formulario */
+.register-card {
+  background-color: transparent;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Título */
+.register-card h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #1a1a1a;
+}
+
+/* Campos de formulario */
+.register-card input[type="text"],
+.register-card input[type="email"],
+.register-card input[type="password"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #004257; /* Azul oscuro */
+  color: #fff;
+  font-size: 0.95rem;
+  outline: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.register-card input::placeholder {
+  color: #d1e3e8;
+}
+
+.register-card input:focus {
+  background-color: #005a6d;
+}
+
+/* Botón de registro */
+.register-btn {
+  width: 100%;
+  background-color: #ff914d; /* Naranja */
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.register-btn:hover {
+  background-color: #ff7a29;
+  transform: translateY(-2px);
+}
+
+/* Texto inferior */
+.register-footer {
+  margin-top: 1.2rem;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+}
+
+.register-footer a {
+  font-weight: 600;
+  color: #000;
+  text-decoration: none;
+}
+
+.register-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Separador con línea */
+.divider {
+  border-top: 1px solid #ccc;
+  margin: 1.5rem 0;
+}
+
+/* Botón de Google */
+.google-btn {
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.google-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.google-btn img {
+  width: 20px;
+  margin-right: 10px;
+}

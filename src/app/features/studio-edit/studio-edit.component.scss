@@ -1,0 +1,55 @@
+.edit-container {
+  background-color: #fff8e4;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 3rem;
+}
+
+h2 {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.edit-card {
+  background-color: #004b5f;
+  color: white;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 25px;
+
+  .form-control {
+    background-color: #d9d9d9;
+    border: none;
+    border-radius: 5px;
+  }
+
+  .image-preview {
+    margin-top: 10px;
+
+    img {
+      width: 150px;
+      height: auto;
+      border-radius: 5px;
+      background: white;
+      padding: 5px;
+    }
+  }
+
+  button.btn-danger {
+    background-color: #e63946;
+    border: none;
+    padding: 10px 25px;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+
+  button.btn-warning {
+    background-color: #ff9234;
+    border: none;
+    padding: 10px 25px;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+}
