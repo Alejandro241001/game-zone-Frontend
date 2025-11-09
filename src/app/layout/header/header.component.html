@@ -1,7 +1,12 @@
 <header class="main-header">
   <div class="logo">
     <a routerLink="/">
-      <img class="imagen logo" src="assets/logo.png" alt="Game Zone Logo">
+      <img
+  class="imagen logo"
+  src="http://localhost:8080/img/logo.png"
+  alt="Game Zone Logo"
+  onerror="this.src='assets/logo.png'"
+>
     </a>
   </div>
 
@@ -17,6 +22,18 @@
       <!-- 🔑 Si NO está logueado -->
       <li *ngIf="!isLoggedIn"><a routerLink="/login">Iniciar sesión</a></li>
       <li *ngIf="!isLoggedIn"><a routerLink="/register">Registrarse</a></li>
+
+      <!-- 🔹 Imagen de perfil del usuario -->
+<li *ngIf="isLoggedIn" class="user-avatar">
+  <a routerLink="/account" class="avatar-link">
+    <img
+      src="http://localhost:8080/img/default.png"
+      alt="Avatar de usuario"
+      class="avatar-img"
+      onerror="this.src='assets/default-avatar.png'"
+    >
+  </a>
+</li>
 
       <!-- 🚪 Si SÍ está logueado -->
       <li *ngIf="isLoggedIn"><a (click)="logout()">Cerrar sesión</a></li>

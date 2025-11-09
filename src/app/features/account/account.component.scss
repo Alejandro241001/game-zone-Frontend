@@ -1,0 +1,23 @@
+.card {
+  background-color: #fff8e4;
+  border-radius: 15px;
+  border: none;
+}
+
+.profile-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ddd;
+  transition: transform 0.3s ease;
+}
+
+.profile-img:hover {
+  transform: scale(1.05);
+  border-color: #ff6600;
+}
+
+button {
+  border-radius: 10px;
+}

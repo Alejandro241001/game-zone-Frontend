@@ -1,149 +1,160 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core'; 
-import { isPlatformBrowser } from '@angular/common'; // Importar la función de verificación de plataforma
-import { HttpClient, HttpHeaders } from '@angular/common/http'; 
-import { Router } from '@angular/router'; 
-import { BehaviorSubject, Observable } from 'rxjs'; 
-import { map } from 'rxjs/operators'; 
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
-@Injectable({ 
- providedIn: 'root', 
-}) 
-export class AuthService { 
- private token = new BehaviorSubject<string | null>(null); 
- private isBrowser: boolean; // Propiedad para guardar si estamos en el navegador
- 
- constructor(
-    private http: HttpClient, 
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthService {
+  private token = new BehaviorSubject<string | null>(null);
+  private isBrowser: boolean;
+
+  // 🔹 Imagen de perfil reactiva
+  private profileImageSubject = new BehaviorSubject<string>('default.jpg');
+  profileImage$: Observable<string> = this.profileImageSubject.asObservable();
+
+  constructor(
+    private http: HttpClient,
     private router: Router,
-    // 🔥🔥 INYECTAR PLATFORM_ID 🔥🔥
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    // Determinar si estamos en el navegador o en el servidor
     this.isBrowser = isPlatformBrowser(this.platformId);
 
-    // 🔥🔥 CORRECCIÓN CLAVE: Solo acceder a localStorage si es el navegador 🔥🔥
+    // 🔹 Inicializa token si existe en localStorage
     if (this.isBrowser) {
-        const initialToken = localStorage.getItem('token');
-        if (initialToken) {
-            this.token.next(initialToken); // Inicializa el BehaviorSubject con el token guardado
-        }
-    }
-} 
- 
- /**   * Método para autenticar al usuario. 
-  * @param username - Nombre de usuario ingresado. 
-  * @param password - Contraseña ingresada. 
-  * @returns Observable que emite un objeto con el token de autenticación si la 
-solicitud es exitosa. 
-  */ 
- login(username: string, password: string): Observable<{ token: string }> { 
-   return this.http.post<{ token: string }>( 
-     `${environment.apiUrl}/v1/authenticate`, 
-     { username, password }, 
-     { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) } 
-   ); 
- } 
- 
- /**   * Almacena el token de autenticación en el BehaviorSubject. 
-  * @param token - Token recibido tras una autenticación exitosa. 
-  */ 
- setToken(token: string): void { 
-   this.token.next(token); // Actualiza el valor del token. 
-    if (this.isBrowser) {
-      localStorage.setItem('token', token); // 💾 guarda el token
-    }
- } 
- 
- /**   * Obtiene el token actual almacenado en el BehaviorSubject. 
-  * @returns El token actual o null si no está definido. 
-  */ 
-// En el Canvas Auth Service Corregido:
-// En el Auth Service Corregido:
- getToken(): string | null {
-  // 🔥 AJUSTE: Si el BehaviorSubject es null, intenta leer de localStorage por si acaso
-  const currentToken = this.token.value;
-  if (currentToken) return currentToken;
+      const initialToken = localStorage.getItem('token');
+      if (initialToken) {
+        this.token.next(initialToken);
+      }
 
-  if (this.isBrowser) {
-    const persistedToken = localStorage.getItem('token');
-    if (persistedToken) {
-        // Si lo encontramos en localStorage, lo propagamos al BehaviorSubject para actualizar el estado
-        this.token.next(persistedToken); // <--- RIESGO: Esto es asíncrono.
+      // 🔹 Inicializa imagen de perfil si está guardada
+      const storedImage = localStorage.getItem('profileImage');
+      if (storedImage) {
+        this.profileImageSubject.next(storedImage);
+      }
     }
-    return persistedToken;
   }
-  return null;
-}
- /**   * Devuelve un observable que emite el estado de autenticación basado en la 
-existencia del token. 
-  * @returns Observable<boolean> 
-  */ 
- isLoggedIn(): Observable<boolean> { 
-   // Verifica si el token existe y emite un valor booleano. 
-   return this.token.asObservable().pipe(map((token: string | null) => !!token)); 
- } 
- 
- /**   * Método para cerrar la sesión del usuario. 
-  * Elimina el token y redirige al usuario a la página de inicio de sesión. 
-  */ 
- logout(): void { 
-   this.token.next(null); // Limpia el token almacenado. 
+
+  // ----------------- AUTENTICACIÓN -----------------
+
+  login(username: string, password: string): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>(
+      `${environment.apiUrl}/v1/authenticate`,
+      { username, password },
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
+  }
+
+  setToken(token: string): void {
+    this.token.next(token);
     if (this.isBrowser) {
-      localStorage.removeItem('token'); // 🧹 limpia almacenamiento
+      localStorage.setItem('token', token);
     }
-   this.router.navigate(['/login']); // 👈 mejor que ir a raíz
- } 
+  }
 
- /**
- * Decodifica el JWT para obtener la información del usuario (ej. rol).
- */
-private decodeToken(token: string): any | null {
-  if (!this.isBrowser) return null; // Evitar la decodificación en el servidor
-  try {
-    // La decodificación se hace en base64 (atob)
-    const payload = token.split('.')[1];
-    return JSON.parse(atob(payload));
-  } catch (e) {
-    console.error('Error decodificando token:', e);
-    return null;
-  }
-}
+  getToken(): string | null {
+    const currentToken = this.token.value;
+    if (currentToken) return currentToken;
 
+    if (this.isBrowser) {
+      const persistedToken = localStorage.getItem('token');
+      if (persistedToken) {
+        this.token.next(persistedToken);
+      }
+      return persistedToken;
+    }
+    return null;
+  }
 
+  logout(): void {
+    this.token.next(null);
+    if (this.isBrowser) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('profileImage');
+    }
+    this.router.navigate(['/login']);
+  }
 
-/**
- * Obtiene el rol actual del usuario logueado.
- * @returns string | null
- */
-getUserRole(): string | null {
-  const token = this.getToken();
-  if (!token) return null;
+  // ----------------- PERFIL DE USUARIO -----------------
 
-  const decoded = this.decodeToken(token);
-  const role =
-    decoded?.role ||
-    decoded?.roles?.[0] ||
-    decoded?.authorities?.[0]?.authority ||
-    null;
+  /** 🔹 Decodifica el token para obtener datos básicos del usuario */
+  getUserData(): any {
+    const token = this.getToken();
+    if (!token) return null;
 
-  // 🔹 Normaliza el formato (quita prefijos tipo "ROLE_" y pasa a mayúsculas)
-  return role ? role.replace('ROLE_', '').toUpperCase() : null;
-}
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return {
+        username: payload.sub || payload.username || 'Usuario',
+        email: payload.email || '',
+        role: payload.role || payload.roles || 'USER',
+        img: payload.img || this.getCurrentProfileImage(),
+      };
+    } catch (e) {
+      console.error('❌ Error al decodificar token:', e);
+      return null;
+    }
+  }
 
-/**
- * Verifica si el usuario logueado es manager (o admin).
- */
-isManager(): boolean {
-  const role = this.getUserRole();
-  return role === 'MANAGER'; // ✅ Solo managers, no admins
-}
+  /** 🔹 Actualiza la imagen de perfil en tiempo real */
+  updateProfileImage(newImage: string): void {
+    this.profileImageSubject.next(newImage);
+    if (this.isBrowser) {
+      localStorage.setItem('profileImage', newImage);
+    }
+  }
 
-isAdmin(): boolean {
-  const role = this.getUserRole();
-  return role === 'ADMIN';
-}
+  /** 🔹 Obtiene la imagen actual del usuario */
+  getCurrentProfileImage(): string {
+    if (this.isBrowser) {
+      const stored = localStorage.getItem('profileImage');
+      if (stored) this.profileImageSubject.next(stored);
+    }
+    return this.profileImageSubject.value;
+  }
 
+  // ----------------- ROLES -----------------
 
+  private decodeToken(token: string): any | null {
+    if (!this.isBrowser) return null;
+    try {
+      const payload = token.split('.')[1];
+      return JSON.parse(atob(payload));
+    } catch (e) {
+      console.error('Error decodificando token:', e);
+      return null;
+    }
+  }
 
+  getUserRole(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    const decoded = this.decodeToken(token);
+    const role =
+      decoded?.role ||
+      decoded?.roles?.[0] ||
+      decoded?.authorities?.[0]?.authority ||
+      null;
+
+    return role ? role.replace('ROLE_', '').toUpperCase() : null;
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    return this.token.asObservable().pipe(map((token: string | null) => !!token));
+  }
+
+  isManager(): boolean {
+    const role = this.getUserRole();
+    return role === 'MANAGER';
+  }
+
+  isAdmin(): boolean {
+    const role = this.getUserRole();
+    return role === 'ADMIN';
+  }
 }

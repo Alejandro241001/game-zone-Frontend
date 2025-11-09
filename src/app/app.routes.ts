@@ -13,6 +13,7 @@ import { RegisterComponent } from './features/register/register.component';
 import { authGuard } from './core/guards/auth.guard';
 import { StudioCreateComponent } from './features/studio-create/studio-create.component';
 import { StudioEditComponent } from './features/studio-edit/studio-edit.component';
+import { AccountComponent } from './features/account/account.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -54,6 +55,12 @@ export const routes: Routes = [
   canActivate: [authGuard],
   data: { roles: ['MANAGER'] }
 },
+ {
+    path: 'account',
+    component: AccountComponent,
+    canActivate: [authGuard],
+    data: { roles: ['USER', 'MANAGER', 'ADMIN'] }
+  },
 
 
   {

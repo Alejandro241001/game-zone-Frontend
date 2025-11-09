@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { VideogameDetailService, VideoGame } from '../../core/services/videogame-detail.service';
-import { AuthService } from '../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { VideogameDetailService, VideoGame } from '../../core/services/videogame-detail.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-videogames',
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule, HttpClientModule],
   templateUrl: './videogames.component.html',
+  styleUrls: ['./videogames.component.scss']
 })
 export class VideogamesComponent implements OnInit {
 
   videogames: VideoGame[] = [];
   error: string | null = null;
-  isManager: boolean = false;
+  isManager = false;
 
-  // 🔹 Datos para el nuevo videojuego
   newVideogame: Partial<VideoGame> = {
     name: '',
     description: '',
@@ -31,7 +31,8 @@ export class VideogamesComponent implements OnInit {
 
   constructor(
     private videogameService: VideogameDetailService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -42,7 +43,7 @@ export class VideogamesComponent implements OnInit {
   /** 🔹 Cargar todos los videojuegos */
   loadVideogames(): void {
     this.error = null;
-    this.videogameService.fetchVideogameById(0); // solo para inicializar correctamente el servicio
+
     fetch(`${this.videogameService['apiUrl']}`)
       .then(res => res.json())
       .then(data => {
@@ -58,6 +59,17 @@ export class VideogamesComponent implements OnInit {
         console.error('Error al cargar videojuegos:', err);
         this.error = '❌ Error al cargar videojuegos desde la API.';
       });
+  }
+
+  /** 🖼️ Imagen por defecto si falla la original */
+  onImageError(event: Event): void {
+    const element = event.target as HTMLImageElement;
+    element.src = 'assets/default-game.png';
+  }
+
+  /** 🎮 Navegar al detalle al hacer clic en la imagen */
+  goToDetail(id: number): void {
+    this.router.navigate(['/videogames', id]);
   }
 
   /** ➕ Crear nuevo videojuego (solo managers) */
@@ -77,25 +89,13 @@ export class VideogamesComponent implements OnInit {
         console.log('✅ Videojuego creado:', created);
         this.videogames.push(created);
         this.error = '✅ Videojuego añadido correctamente.';
-        // Reinicia el formulario
-        this.newVideogame = {
-          name: '',
-          description: '',
-          metacritic: 0,
-          releaseYear: new Date().getFullYear(),
-          img: '',
-          studio: undefined,
-          platforms: [],
-        };
-        setTimeout(() => this.error = null, 3000);
+        this.resetForm();
       },
       error: (err) => {
         console.error('Error al crear videojuego:', err);
-        if (err.status === 403) {
-          this.error = '❌ Permisos insuficientes para crear videojuegos.';
-        } else {
-          this.error = `❌ Error al crear videojuego: ${err.statusText}`;
-        }
+        this.error = err.status === 403
+          ? '❌ Permisos insuficientes para crear videojuegos.'
+          : `❌ Error al crear videojuego: ${err.statusText}`;
       }
     });
   }
@@ -120,5 +120,19 @@ export class VideogamesComponent implements OnInit {
         }
       });
     }
+  }
+
+  /** ♻️ Resetear formulario */
+  private resetForm(): void {
+    this.newVideogame = {
+      name: '',
+      description: '',
+      metacritic: 0,
+      releaseYear: new Date().getFullYear(),
+      img: '',
+      studio: undefined,
+      platforms: [],
+    };
+    setTimeout(() => this.error = null, 3000);
   }
 }

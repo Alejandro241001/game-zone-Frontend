@@ -83,39 +83,43 @@ export class VideogameCreateComponent implements OnInit {
 
   // ✅ Crear videojuego
   createVideogame(): void {
-    if (!this.authService.isManager()) {
-      this.message = '❌ Solo los MANAGER pueden crear videojuegos.';
-      return;
-    }
-
-    if (!this.newVideogame.name || !this.newVideogame.description || !this.newVideogame.studioId) {
-      this.message = '⚠️ Debes completar los campos obligatorios (nombre, descripción y estudio).';
-      return;
-    }
-
-    const gameDTO = {
-      name: this.newVideogame.name,
-      description: this.newVideogame.description,
-      studioId: Number(this.newVideogame.studioId),
-      metacritic: Number(this.newVideogame.metacritic),
-      releaseYear: Number(this.newVideogame.releaseYear),
-      img: this.newVideogame.img,
-      platformIds: this.selectedPlatformIds,
-      genreIds: this.selectedGenreIds
-    };
-
-    console.log('📦 Enviando DTO:', JSON.stringify(gameDTO, null, 2));
-
-    this.videogameService.createVideogame(gameDTO).subscribe({
-      next: (created: VideoGame) => {
-        console.log('✅ Videojuego creado correctamente:', created);
-        this.message = '✅ Videojuego creado correctamente.';
-        setTimeout(() => this.router.navigate(['/videogames']), 1500);
-      },
-      error: (err) => {
-        console.error('❌ Error al crear videojuego:', err);
-        this.message = `❌ Error al crear videojuego: ${err.statusText || 'Error de conexión'}`;
-      }
-    });
+  if (!this.authService.isManager()) {
+    this.message = '❌ Solo los MANAGER pueden crear videojuegos.';
+    return;
   }
+
+  if (!this.newVideogame.name || !this.newVideogame.description || !this.newVideogame.studioId) {
+    this.message = '⚠️ Debes completar los campos obligatorios (nombre, descripción y estudio).';
+    return;
+  }
+
+  // ✅ Normalizar la imagen (solo nombre, sin URL completa)
+  const imgName = this.newVideogame.img?.trim() || '';
+  const cleanImgName = imgName.split('/').pop(); // -> elimina posibles rutas o URLs
+
+  const gameDTO = {
+    name: this.newVideogame.name.trim(),
+    description: this.newVideogame.description.trim(),
+    studioId: Number(this.newVideogame.studioId),
+    metacritic: Number(this.newVideogame.metacritic),
+    releaseYear: Number(this.newVideogame.releaseYear),
+    img: cleanImgName, // 👈 usamos solo el nombre limpio
+    platformIds: this.selectedPlatformIds,
+    genreIds: this.selectedGenreIds
+  };
+
+  console.log('📦 Enviando DTO:', JSON.stringify(gameDTO, null, 2));
+
+  this.videogameService.createVideogame(gameDTO).subscribe({
+    next: (created: VideoGame) => {
+      console.log('✅ Videojuego creado correctamente:', created);
+      this.message = '✅ Videojuego creado correctamente.';
+      setTimeout(() => this.router.navigate(['/videogames']), 1500);
+    },
+    error: (err) => {
+      console.error('❌ Error al crear videojuego:', err);
+      this.message = `❌ Error al crear videojuego: ${err.statusText || 'Error de conexión'}`;
+    }
+  });
+}
 }

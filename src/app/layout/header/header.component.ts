@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -12,37 +12,50 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  isLoggedIn = false;  // Estado del login
-  isAdmin = false;     // Estado del rol
-  private subscription: Subscription | null = null;
+  isLoggedIn = false;
+  isAdmin = false;
+  userImgUrl = 'http://localhost:8080/img/default.jpg'; // Imagen por defecto
+  private subscriptions: Subscription[] = [];
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    // 🔹 Suscripción para saber si el usuario está logueado
-    this.subscription = this.authService.isLoggedIn().subscribe((loggedIn) => {
+    // 🔹 Combina estado de sesión + imagen de perfil
+    const sub = combineLatest([
+      this.authService.isLoggedIn(),
+      this.authService.profileImage$
+    ]).subscribe(([loggedIn, profileImage]) => {
       this.isLoggedIn = loggedIn;
 
-      // Si está logueado, comprobamos el rol en tiempo real
       if (loggedIn) {
         const role = this.authService.getUserRole();
         this.isAdmin = role === 'ADMIN';
+
+        // ✅ Cargar imagen del usuario actual (del BehaviorSubject)
+        this.userImgUrl = `http://localhost:8080/img/${profileImage}`;
       } else {
         this.isAdmin = false;
+        this.userImgUrl = 'http://localhost:8080/img/default.jpg';
       }
     });
+
+    this.subscriptions.push(sub);
+  }
+
+  // 🔹 Si la imagen falla al cargar, poner la predeterminada
+  onAvatarError(event: Event): void {
+    (event.target as HTMLImageElement).src = 'http://localhost:8080/img/default.png';
   }
 
   logout(): void {
     this.authService.logout();
     this.isLoggedIn = false;
     this.isAdmin = false;
+    this.userImgUrl = 'http://localhost:8080/img/default.png';
     this.router.navigate(['/']);
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscriptions.forEach(s => s.unsubscribe());
   }
 }

@@ -1,23 +1,95 @@
-// Definición del color negro para el footer (si no usas directamente bg-dark de Bootstrap)
-$footer-bg: #000000;
-$contact-link: #ffcc00; // Un amarillo visible (o usa text-warning de Bootstrap)
+.footer {
+  background-color: #000;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  padding: 40px 0;
 
-// Estilo del contenedor principal del footer
-footer {
-    background-color: $footer-bg !important;
+  .footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 40px;
+    align-items: start;
+    justify-items: center;
+    padding: 0 40px;
+  }
+
+  .footer-logo {
+    width: 100px;
+    margin-bottom: 10px;
+  }
+
+  .footer-slogan {
+    font-size: 0.8rem;
+    color: #ccc;
+    margin-top: 8px;
+  }
+
+  .footer-title {
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-size: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    li {
+      margin: 6px 0;
+      a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 400;
+        &:hover {
+          color: #ffcc00;
+        }
+      }
+    }
+  }
+
+  .footer-contact {
+    color: #ffef7a;
+    text-decoration: none;
+    font-weight: 500;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .footer-social {
+  display: flex;
+  gap: 15px;
+  img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.2s ease-in-out;
+    &:hover {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+  }
 }
 
-// Estilo para el link de contacto (si no usas text-warning)
-.text-warning {
-    color: $contact-link !important;
-}
+  .footer-divider {
+    margin: 30px auto;
+    border-color: rgba(236, 236, 236, 0.459);
+    width: 90%;
+  }
 
-// Estilo para los elementos de la lista de navegación
-.list-unstyled a:hover {
-    color: $contact-link !important; // Efecto hover
-}
-
-// Estilo de la línea divisoria
-hr {
-    border-color: rgba(255, 255, 255, 0.2) !important;
+  .footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    padding: 0 40px;
+    .footer-links a {
+      color: #fff;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      &:hover {
+        color: #ffcc00;
+      }
+    }
+  }
 }

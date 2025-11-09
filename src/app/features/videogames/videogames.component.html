@@ -1,46 +1,39 @@
-<div class="container-fluid mt-4">
-  <div class="row"> 
-    <div class="col-md-9 offset-md-1">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>🎮 VIDEOJUEGOS</h1>
-        <!-- Solo visible para managers -->
-        <button *ngIf="isManager" class="btn btn-primary" [routerLink]="['/videogames/new']">
-          ➕ Añadir videojuego
-        </button>
-      </div>
+<div class="container my-5">
 
-      <hr class="gamezone-divider">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">🎮 VIDEOJUEGOS</h1>
 
-      <div *ngIf="error" class="alert alert-warning text-center">
-        {{ error }}
-      </div>
+    <!-- 🔹 Botón visible solo para MANAGER -->
+    <button
+      *ngIf="isManager"
+      class="btn btn-primary"
+      [routerLink]="['/videogames/new']"
+    >
+      ➕ Añadir videojuego
+    </button>
+  </div>
 
-      <div *ngIf="!videogames || videogames.length === 0" class="alert alert-info mt-5">
-        No hay videojuegos disponibles.
-      </div>
+  <hr class="gamezone-divider" />
 
-      <div class="row">
-        <div class="col-6 col-sm-4 col-lg-3 mb-4" *ngFor="let videogame of videogames">
-          <div class="card card-videogame text-center shadow-sm position-relative">
-            <img src="http://localhost:8080/img/{{ videogame.img }}" class="card-img-top img-fluid" alt="{{ videogame.name }}">
+  <div *ngIf="error" class="alert alert-warning text-center">
+    {{ error }}
+  </div>
 
-            <div class="card-body">
-              <h6 class="card-title fw-bold">{{ videogame.name }}</h6>
-              <p class="text-muted small mb-1">{{ videogame.studio?.name }}</p>
-              <p class="small mb-2">🕹️ {{ videogame.releaseYear }} • ⭐ {{ videogame.metacritic }}</p>
+  <div *ngIf="!videogames || videogames.length === 0" class="alert alert-info mt-5 text-center">
+    No hay videojuegos disponibles.
+  </div>
 
-              <a [routerLink]="['/videogames', videogame.id]" class="btn btn-outline-primary btn-sm">
-                Ver detalle
-              </a>
-
-              <button *ngIf="isManager" class="btn btn-outline-danger btn-sm ms-2" (click)="deleteVideogame(videogame.id)">
-                🗑️ Eliminar
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+  <div class="games-grid mt-4">
+    <div
+      class="game-card"
+      *ngFor="let videogame of videogames"
+      (click)="goToDetail(videogame.id)"
+    >
+      <img
+        [src]="'http://localhost:8080/img/' + videogame.img"
+        [alt]="videogame.name"
+        (error)="onImageError($event)"
+      />
     </div>
   </div>
 </div>
