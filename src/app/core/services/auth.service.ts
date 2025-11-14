@@ -13,7 +13,6 @@ export class AuthService {
   private token = new BehaviorSubject<string | null>(null);
   private isBrowser: boolean;
 
-  // 🔹 Imagen de perfil reactiva
   private profileImageSubject = new BehaviorSubject<string>('default.jpg');
   profileImage$: Observable<string> = this.profileImageSubject.asObservable();
 
@@ -24,14 +23,12 @@ export class AuthService {
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
 
-    // 🔹 Inicializa token si existe en localStorage
     if (this.isBrowser) {
       const initialToken = localStorage.getItem('token');
       if (initialToken) {
         this.token.next(initialToken);
       }
 
-      // 🔹 Inicializa imagen de perfil si está guardada
       const storedImage = localStorage.getItem('profileImage');
       if (storedImage) {
         this.profileImageSubject.next(storedImage);
@@ -39,7 +36,7 @@ export class AuthService {
     }
   }
 
-  // ----------------- AUTENTICACIÓN -----------------
+  // ----------------- LOGIN -----------------
 
   login(username: string, password: string): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(
@@ -64,8 +61,8 @@ export class AuthService {
       const persistedToken = localStorage.getItem('token');
       if (persistedToken) {
         this.token.next(persistedToken);
+        return persistedToken;
       }
-      return persistedToken;
     }
     return null;
   }
@@ -79,82 +76,96 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  // ----------------- PERFIL DE USUARIO -----------------
-
-  /** 🔹 Decodifica el token para obtener datos básicos del usuario */
-  getUserData(): any {
-    const token = this.getToken();
-    if (!token) return null;
-
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return {
-        username: payload.sub || payload.username || 'Usuario',
-        email: payload.email || '',
-        role: payload.role || payload.roles || 'USER',
-        img: payload.img || this.getCurrentProfileImage(),
-      };
-    } catch (e) {
-      console.error('❌ Error al decodificar token:', e);
-      return null;
-    }
-  }
-
-  /** 🔹 Actualiza la imagen de perfil en tiempo real */
-  updateProfileImage(newImage: string): void {
-    this.profileImageSubject.next(newImage);
-    if (this.isBrowser) {
-      localStorage.setItem('profileImage', newImage);
-    }
-  }
-
-  /** 🔹 Obtiene la imagen actual del usuario */
-  getCurrentProfileImage(): string {
-    if (this.isBrowser) {
-      const stored = localStorage.getItem('profileImage');
-      if (stored) this.profileImageSubject.next(stored);
-    }
-    return this.profileImageSubject.value;
-  }
-
-  // ----------------- ROLES -----------------
+  // ----------------- TOKEN HELPERS -----------------
 
   private decodeToken(token: string): any | null {
     if (!this.isBrowser) return null;
+
     try {
-      const payload = token.split('.')[1];
-      return JSON.parse(atob(payload));
+      const payloadBase64 = token.split('.')[1];
+      return JSON.parse(atob(payloadBase64));
     } catch (e) {
       console.error('Error decodificando token:', e);
       return null;
     }
   }
 
+  getUserData(): any {
+    const token = this.getToken();
+    if (!token) return null;
+
+    const payload = this.decodeToken(token);
+    if (!payload) return null;
+
+    return {
+      username: payload.sub,
+      roles: payload.roles || [],
+      userId: payload.userId,
+      img: this.getCurrentProfileImage()
+    };
+  }
+
+  // ----------------- ROLES -----------------
+
   getUserRole(): string | null {
     const token = this.getToken();
     if (!token) return null;
 
-    const decoded = this.decodeToken(token);
-    const role =
-      decoded?.role ||
-      decoded?.roles?.[0] ||
-      decoded?.authorities?.[0]?.authority ||
-      null;
+    const payload = this.decodeToken(token);
+    if (!payload) return null;
 
-    return role ? role.replace('ROLE_', '').toUpperCase() : null;
-  }
+    const roles = payload.roles;
 
-  isLoggedIn(): Observable<boolean> {
-    return this.token.asObservable().pipe(map((token: string | null) => !!token));
+    if (!roles || roles.length === 0) return null;
+
+    return roles[0].replace('ROLE_', '').toUpperCase();
   }
 
   isManager(): boolean {
-    const role = this.getUserRole();
-    return role === 'MANAGER';
+    return this.getUserRole() === 'MANAGER';
   }
 
   isAdmin(): boolean {
-    const role = this.getUserRole();
-    return role === 'ADMIN';
+    return this.getUserRole() === 'ADMIN';
+  }
+
+  isLoggedIn(): Observable<boolean> {
+    return this.token.asObservable().pipe(map((token) => !!token));
+  }
+
+  isLoggedInSync(): boolean {
+    return !!this.getToken();
+  }
+
+  // ----------------- USER ID CORREGIDO -----------------
+
+  getUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    const payload = this.decodeToken(token);
+    if (!payload) return null;
+
+    return payload.userId || null;  // 🔥 AQUÍ ESTABA EL FALLO
+  }
+
+  // ----------------- PROFILE IMAGE -----------------
+
+  updateProfileImage(newImage: string): void {
+    this.profileImageSubject.next(newImage);
+
+    if (this.isBrowser) {
+      localStorage.setItem('profileImage', newImage);
+    }
+  }
+
+  getCurrentProfileImage(): string {
+    if (this.isBrowser) {
+      const stored = localStorage.getItem('profileImage');
+      if (stored) {
+        this.profileImageSubject.next(stored);
+      }
+    }
+    return this.profileImageSubject.value;
   }
 }

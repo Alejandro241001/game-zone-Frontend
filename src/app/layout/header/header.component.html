@@ -2,10 +2,10 @@
   <div class="logo">
     <a routerLink="/">
       <img
-  class="imagen logo"
-  src="http://localhost:8080/img/logo.png"
+  class="logo-img"
+  [src]="logoUrl"
   alt="Game Zone Logo"
-  onerror="this.src='assets/logo.png'"
+  (error)="onLogoError($event)"
 >
     </a>
   </div>
@@ -14,28 +14,27 @@
     <ul class="nav-links">
       <li><a routerLink="/">Inicio</a></li>
       <li><a routerLink="/videogames">Videojuegos</a></li>
-      <li *ngIf="isLoggedIn"><a routerLink="/studios">Estudios</a></li><!-- 🧩 Nueva pestaña visible para todos -->
-
-      <!-- 🔥 SOLO visible si el rol es ADMIN -->
+      <li *ngIf="isLoggedIn"><a routerLink="/studios">Estudios</a></li>
       <li *ngIf="isAdmin"><a routerLink="/users">Usuarios</a></li>
 
-      <!-- 🔑 Si NO está logueado -->
       <li *ngIf="!isLoggedIn"><a routerLink="/login">Iniciar sesión</a></li>
       <li *ngIf="!isLoggedIn"><a routerLink="/register">Registrarse</a></li>
 
-      <!-- 🔹 Imagen de perfil del usuario -->
-<li *ngIf="isLoggedIn" class="user-avatar">
-  <a routerLink="/account" class="avatar-link">
-    <img
-      src="http://localhost:8080/img/default.png"
-      alt="Avatar de usuario"
-      class="avatar-img"
-      onerror="this.src='assets/default-avatar.png'"
-    >
-  </a>
-</li>
+      <li *ngIf="isLoggedIn" class="user-avatar">
+        <a routerLink="/account" class="avatar-link">
+          <img
+            src="http://localhost:8080/img/default.png"
+            alt="Avatar de usuario"
+            class="avatar-img"
+            onerror="this.src='assets/default-avatar.png'"
+          >
+        </a>
+      </li>
 
-      <!-- 🚪 Si SÍ está logueado -->
+      <button class="theme-btn" (click)="toggleDarkMode()">
+  🌓
+</button>
+
       <li *ngIf="isLoggedIn"><a (click)="logout()">Cerrar sesión</a></li>
     </ul>
   </nav>

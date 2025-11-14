@@ -21,6 +21,93 @@ body {
     background-color: $gamezone-beige !important;
 }
 
+/* ========================== */
+/* 🌙 MODO OSCURO GLOBAL      */
+/* ========================== */
+body.dark-mode {
+  background-color: #121212;
+  color: #e4e4e4;
+}
+
+/* Links */
+body.dark-mode a {
+  color: #c9c9ff !important;
+}
+
+/* Tarjetas, contenedores y componentes generales */
+body.dark-mode .card,
+body.dark-mode .container,
+body.dark-mode .content,
+body.dark-mode .wrapper {
+  background-color: #1e1e1e !important;
+  color: #f1f1f1 !important;
+}
+
+/* Inputs */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+  background-color: #2a2a2a !important;
+  border-color: #444 !important;
+  color: #fff !important;
+}
+
+/* Tablas */
+body.dark-mode table {
+  background-color: #1f1f1f;
+  color: #fff;
+}
+
+body.dark-mode th {
+  background-color: #333;
+}
+
+body.dark-mode td {
+  border-color: #444;
+}
+
+/* HEADER MODO OSCURO */
+body.dark-mode .main-header {
+  background-color: #1a1a1a !important;
+  border-bottom: 1px solid #333;
+}
+
+body.dark-mode .main-header a {
+  color: #ffffff !important;
+}
+
+body.dark-mode .navigation .nav-links li a {
+  color: #eee !important;
+}
+
+body.dark-mode .user-avatar img {
+  filter: brightness(0.8);
+}
+
+/* CONTENEDORES GENERALES */
+body.dark-mode .container,
+body.dark-mode .content,
+body.dark-mode .wrapper,
+body.dark-mode .section,
+body.dark-mode .card {
+  background-color: #1e1e1e !important;
+  color: #e6e6e6 !important;
+}
+
+/* Fondo global del modo oscuro */
+html.dark-mode,
+body.dark-mode {
+  background-color: #121212 !important;
+  color: #e4e4e4 !important;
+}
+
+/* Asegurar que no queda ningún fondo claro del HTML */
+html {
+  background-color: transparent !important;
+}
+
+
+
 // 2. Importación de Bootstrap (¡Indispensable!)
 @import 'bootstrap/scss/bootstrap'; 
 

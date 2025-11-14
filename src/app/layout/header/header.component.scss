@@ -1,18 +1,7 @@
 /* ===========================
    HEADER GENERAL
    =========================== */
-.main-header { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  background-color: #FFF8E4; /* 🎨 Color de fondo */
-  color: #333; /* Texto oscuro */
-  padding: 10px 20px; 
-  position: sticky; 
-  top: 0; 
-  z-index: 1000; 
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-}
+
 
 /* ===========================
    LOGO
@@ -104,6 +93,93 @@
   color: #333; 
   cursor: pointer; 
 } 
+
+/* Contenedor principal del header */
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;   /* ← esto ya empuja a la derecha */
+  padding: 12px 30px;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid #ccc; 
+}
+
+/* Logo centrado verticalmente */
+.main-header .logo img {
+  height: 55px;
+  object-fit: contain;
+  display: block;
+}
+
+.navigation {
+  flex: 1;            /* ← empuja el contenido del menú hacia la derecha */
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Alinear los items del menú */
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Los <li> del menú */
+.nav-links li {
+  display: flex;
+  align-items: center;
+}
+
+/* Enlaces */
+.nav-links li a {
+  text-decoration: none;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Avatar alineado */
+.user-avatar .avatar-img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+.theme-btn {
+  background: none;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.theme-btn:hover {
+  transform: scale(1.12);
+  background: rgba(0,0,0,0.05);
+}
+
+/* El botón del modo oscuro dentro del ul */
+.nav-links button {
+  display: flex;
+  align-items: center;
+  height: 35px;
+  margin: 0 !important;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
  
 @media (max-width: 768px) { 
   .nav-links { 

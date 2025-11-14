@@ -21,7 +21,7 @@
         <h1 class="mb-3">{{ videogame.name }}</h1>
         <hr class="gamezone-divider">
 
-        <!-- ✅ Si está en modo edición -->
+        <!-- 🔧 Modo edición -->
         <div *ngIf="editing; else viewMode">
           <div class="mb-3">
             <label class="form-label"><strong>Nombre:</strong></label>
@@ -43,15 +43,14 @@
             <input [(ngModel)]="videogame.metacritic" type="number" class="form-control" />
           </div>
 
-          <!-- Botones de acción -->
           <button class="btn btn-success me-2" (click)="saveChanges()">💾 Guardar</button>
           <button class="btn btn-secondary" (click)="editing = false">Cancelar</button>
         </div>
 
-        <!-- ✅ Modo visual normal -->
+        <!-- 👁‍🗨 Modo lectura -->
         <ng-template #viewMode>
           <p><strong>Estudio:</strong> {{ videogame.studio?.name }}</p>
-          <p><strong>Año de lanzamiento:</strong> {{ videogame.releaseYear }}</p>
+          <p><strong>Año:</strong> {{ videogame.releaseYear }}</p>
           <p><strong>Metacritic:</strong> {{ videogame.metacritic }}</p>
           
           <p><strong>Géneros:</strong>
@@ -70,22 +69,117 @@
           <p>{{ videogame.description || 'Sin descripción disponible.' }}</p>
         </ng-template>
 
-        <a routerLink="/videogames" class="btn btn-secondary mt-3 me-2">
-          ← Volver a la lista
-        </a>
+        <a routerLink="/videogames" class="btn btn-secondary mt-3 me-2">← Volver</a>
 
-        <!-- ✅ Solo visible si el usuario es manager -->
         <div *ngIf="isManager" class="mt-3">
           <button class="btn btn-primary me-2" (click)="enableEdit()">✏️ Editar</button>
           <button class="btn btn-danger" (click)="deleteVideogame()">🗑️ Eliminar</button>
-          
         </div>
       </div>
     </div>
+
+    <!-- ========================================================= -->
+    <!-- 🌟 REVIEWS DEL VIDEOJUEGO -->
+    <!-- ========================================================= -->
+
+    <hr class="my-4">
+
+    <h2 class="mb-3">💬 Reseñas de usuarios</h2>
+
+    <!-- Si NO hay reviews -->
+    <div *ngIf="reviews.length === 0" class="alert alert-info">
+      No hay reseñas todavía. ¡Sé el primero en opinar!
+    </div>
+
+    
+    
+<!-- LISTA DE REVIEWS -->
+<div *ngFor="let r of reviews" class="card mb-3 shadow-sm">
+  <div class="card-body">
+
+    <!-- CABECERA -->
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="card-title">{{ r.username }}</h5>
+      <span class="badge bg-primary fs-6">⭐ {{ r.rating }}/10</span>
+    </div>
+
+    <!-- ============================= -->
+    <!-- MODO EDICIÓN DE LA REVIEW -->
+    <!-- ============================= -->
+    <div *ngIf="editingReviewId === r.id; else viewMode">
+
+      <!-- Texto -->
+      <textarea class="form-control mb-2"
+                [(ngModel)]="editReview.reviewText" 
+                rows="3"></textarea>
+
+      <!-- Rating -->
+      <input type="number" class="form-control mb-3"
+             [(ngModel)]="editReview.rating"
+             min="0" max="10"/>
+
+      <!-- Botones edición -->
+      <button class="btn btn-success me-2" (click)="saveEditedReview(r.id)">
+        💾 Guardar
+      </button>
+
+      <button class="btn btn-secondary" (click)="cancelEdit()">
+        Cancelar
+      </button>
+    </div>
+
+    <!-- ============================= -->
+    <!-- MODO NORMAL -->
+    <!-- ============================= -->
+    <ng-template #viewMode>
+      <p class="card-text mt-2">{{ r.reviewText || 'Sin comentario.' }}</p>
+      <p class="text-muted small">📅 {{ r.createdDate | date:'medium' }}</p>
+
+      <!-- BOTONES EDITAR / ELIMINAR -->
+      <div *ngIf="isCurrentUserOwner(r.userId) || isManager">
+        <button class="btn btn-warning btn-sm me-2" (click)="startEdit(r)">
+          ✏️ Editar
+        </button>
+
+        <button class="btn btn-danger btn-sm" (click)="deleteReview(r.id)">
+          🗑️ Eliminar
+        </button>
+      </div>
+    </ng-template>
+
   </div>
 </div>
 
-<!-- Pantalla de carga -->
+
+
+
+    <!-- ========================================================= -->
+    <!-- 📝 FORMULARIO PARA CREAR REVIEW (solo si estás autenticado) -->
+    <!-- ========================================================= -->
+
+    <div *ngIf="authService.isLoggedIn()" class="mt-4">
+      <h3>📝 Escribe tu opinión</h3>
+
+      <form (ngSubmit)="submitReview()" #reviewForm="ngForm">
+
+        <label class="form-label fw-bold">Puntuación (0-10):</label>
+        <input type="number" class="form-control mb-2" [(ngModel)]="newReview.rating"
+               name="rating" min="0" max="10" required />
+
+        <label class="form-label fw-bold">Comentario:</label>
+        <textarea class="form-control" rows="3"
+                  [(ngModel)]="newReview.reviewText" name="reviewText"></textarea>
+
+        <button class="btn btn-success mt-3" [disabled]="!reviewForm.valid">
+          ➕ Publicar reseña
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<!-- Cargando -->
 <ng-template #loadingTemplate>
   <div class="text-center mt-5">
     <div class="spinner-border text-primary" role="status"></div>
