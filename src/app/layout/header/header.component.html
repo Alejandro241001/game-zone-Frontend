@@ -15,6 +15,7 @@
       <li><a routerLink="/">Inicio</a></li>
       <li><a routerLink="/videogames">Videojuegos</a></li>
       <li *ngIf="isLoggedIn"><a routerLink="/studios">Estudios</a></li>
+      <li *ngIf="isLoggedIn"><a routerLink="/lists">Listas</a></li>
       <li *ngIf="isAdmin"><a routerLink="/users">Usuarios</a></li>
 
       <li *ngIf="!isLoggedIn"><a routerLink="/login">Iniciar sesión</a></li>

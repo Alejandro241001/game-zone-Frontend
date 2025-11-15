@@ -9,6 +9,8 @@ import { ForbiddenComponent } from './features/forbidden/forbidden.component';
 import { Error404Component } from './features/error404/error404.component';
 import { UsersComponent } from './features/users/users.component';
 import { RegisterComponent } from './features/register/register.component';
+import { ListsComponent } from './features/lists/lists.component';
+import { EditListComponent } from './features/edit-list/edit-list.component';
 
 import { authGuard } from './core/guards/auth.guard';
 import { StudioCreateComponent } from './features/studio-create/studio-create.component';
@@ -55,6 +57,8 @@ export const routes: Routes = [
   canActivate: [authGuard],
   data: { roles: ['MANAGER'] }
 },
+
+
  {
     path: 'account',
     component: AccountComponent,
@@ -62,6 +66,16 @@ export const routes: Routes = [
     data: { roles: ['USER', 'MANAGER', 'ADMIN'] }
   },
 
+  {
+  path: 'lists',
+  component: ListsComponent,
+  canActivate: [authGuard]   
+},
+{
+  path: 'lists/edit/:id',
+  component: EditListComponent,
+  canActivate: [authGuard]
+},
 
   {
     path: 'users',

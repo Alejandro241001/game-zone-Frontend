@@ -1,0 +1,35 @@
+.lists-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 30px;
+}
+
+.create-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lists {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.list-card {
+  background: #fff8e4;
+  border-radius: 12px;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:hover {
+    background: #ffeec1;
+    transition: 0.3s;
+  }
+}
+
+.actions button {
+  border-radius: 8px;
+}

@@ -1,0 +1,62 @@
+<div class="edit-list-container">
+
+  <div class="header-row mb-4">
+  <h2 class="m-0">✏ Editar lista</h2>
+
+  <button class="btn btn-outline-secondary back-btn" (click)="goBack()">
+    ⬅ Volver
+  </button>
+</div>
+
+
+  <!-- EDITAR TÍTULO -->
+  <label class="fw-bold">Título:</label>
+  <input class="form-control mb-3" [(ngModel)]="listName" />
+
+  <button class="btn btn-success mb-4" (click)="saveName()">
+    💾 Guardar cambios
+  </button>
+
+  <hr />
+
+  <!-- AÑADIR VIDEOJUEGO -->
+  <h4>🎮 Añadir un videojuego</h4>
+
+  <div class="d-flex gap-3 align-items-center mb-3">
+    <!-- DESPLEGABLE CORREGIDO -->
+    <select class="form-control" [(ngModel)]="selectedGameId">
+      <option [ngValue]="null">Selecciona un videojuego...</option>
+      <option *ngFor="let g of videoGames" [value]="g.id">
+        {{ g.name }}
+      </option>
+    </select>
+
+    <button class="btn btn-primary" (click)="addGame()">
+      ➕ Añadir
+    </button>
+  </div>
+
+  <hr />
+
+  <!-- JUEGOS YA EN LA LISTA -->
+  <h4 class="mb-3">🎲 Videojuegos en la lista</h4>
+
+  <div class="games-grid">
+    <div class="game-card" *ngFor="let g of listGames">
+
+      <img
+        [src]="'http://localhost:8080/img/' + g.img"
+        [alt]="g.name"
+      />
+
+      <h5 class="mt-2">{{ g.name }}</h5>
+
+      <button class="btn btn-danger btn-sm w-100 mt-2"
+              (click)="removeGame(g.id)">
+        🗑 Quitar
+      </button>
+
+    </div>
+  </div>
+
+</div>

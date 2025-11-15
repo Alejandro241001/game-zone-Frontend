@@ -1,0 +1,61 @@
+<h2 class="text-center mb-4">📚 Mis listas</h2>
+
+<!-- CREAR NUEVA LISTA -->
+<div class="create-list-box">
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Nombre de la nueva lista..."
+    [(ngModel)]="newListName"
+  />
+
+  <button class="btn btn-success mt-2 w-100" (click)="createList()">
+    ➕ Crear lista
+  </button>
+</div>
+
+<hr class="my-4" />
+
+<!-- LISTADO DE LISTAS -->
+<div class="list-card" *ngFor="let list of lists">
+
+  <div class="list-info">
+    <h4>{{ list.name }}</h4>
+    <small>📅 {{ list.createdDate | date: 'short' }}</small>
+  </div>
+
+  <div class="actions">
+    <!-- Botón que lleva a la página de edición -->
+    <button class="btn btn-primary" (click)="goToEditPage(list.id)">
+      ✏ Editar
+    </button>
+
+    
+
+    <button class="btn btn-danger" (click)="deleteList(list.id)">
+      🗑
+    </button>
+  </div>
+
+</div>
+
+<!-- PANEL PARA AÑADIR JUEGOS -->
+<div *ngIf="showAddGamesPanel" class="add-games-panel mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>🎮 Añadir videojuegos</h3>
+    <button class="btn btn-secondary" (click)="closeAddGames()">Cerrar ✖</button>
+  </div>
+
+  <div class="games-grid">
+    <div class="game-card" *ngFor="let g of videoGames">
+      <img [src]="'http://localhost:8080/img/' + g.image" [alt]="g.title" />
+      <h5 class="mt-2">{{ g.title }}</h5>
+
+      <button class="btn btn-primary w-100 mt-2" (click)="addGame(g.id)">
+        ➕ Añadir
+      </button>
+    </div>
+  </div>
+
+</div>
