@@ -32,12 +32,18 @@ export class ListsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = this.authService.getUserId();
-    if (!id) return;
-
-    this.userId = id;
-    this.loadLists();
+  if (this.authService.isAdmin()) {
+   
+    this.router.navigate(['/videogames']);
+    return;
   }
+
+  const id = this.authService.getUserId();
+  if (!id) return;
+
+  this.userId = id;
+  this.loadLists();
+}
 
   loadLists(): void {
   this.listsService.getUserLists().subscribe({

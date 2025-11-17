@@ -23,10 +23,50 @@
     No hay videojuegos disponibles.
   </div>
 
+  <!-- ========================= -->
+  <!-- 🎯 FILTROS -->
+  <!-- ========================= -->
+  <div class="card p-3 mb-4 shadow-sm">
+    <h5 class="mb-3">🔍 Filtrar videojuegos</h5>
+
+    <div class="row g-3">
+
+      <!-- Filtro por GENEROS -->
+      <div class="col-md-6">
+        <label><strong>Géneros:</strong></label>
+        <select
+          class="form-select"
+          [(ngModel)]="selectedGenre"
+          (change)="applyFilters()"
+        >
+          <option [ngValue]="null">Todos</option>
+          <option *ngFor="let g of allGenres" [ngValue]="g">{{ g.name }}</option>
+        </select>
+      </div>
+
+      <!-- Filtro por PLATAFORMAS -->
+      <div class="col-md-6">
+        <label><strong>Plataformas:</strong></label>
+        <select
+          class="form-select"
+          [(ngModel)]="selectedPlatform"
+          (change)="applyFilters()"
+        >
+          <option [ngValue]="null">Todas</option>
+          <option *ngFor="let p of allPlatforms" [ngValue]="p">{{ p.name }}</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================= -->
+  <!-- 🎮 LISTADO DE VIDEOJUEGOS -->
+  <!-- ========================= -->
   <div class="games-grid mt-4">
     <div
       class="game-card"
-      *ngFor="let videogame of videogames"
+      *ngFor="let videogame of filteredVideogames"
       (click)="goToDetail(videogame.id)"
     >
       <img
@@ -36,4 +76,5 @@
       />
     </div>
   </div>
+
 </div>

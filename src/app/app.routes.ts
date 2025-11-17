@@ -8,7 +8,6 @@ import { StudiosComponent } from './features/studios/studios.component';
 import { ForbiddenComponent } from './features/forbidden/forbidden.component';
 import { Error404Component } from './features/error404/error404.component';
 import { UsersComponent } from './features/users/users.component';
-import { RegisterComponent } from './features/register/register.component';
 import { ListsComponent } from './features/lists/lists.component';
 import { EditListComponent } from './features/edit-list/edit-list.component';
 
@@ -69,12 +68,14 @@ export const routes: Routes = [
   {
   path: 'lists',
   component: ListsComponent,
-  canActivate: [authGuard]   
+  canActivate: [authGuard],
+  data: { roles: ['USER', 'MANAGER'] }
 },
 {
   path: 'lists/edit/:id',
   component: EditListComponent,
-  canActivate: [authGuard]
+  canActivate: [authGuard],
+  data: { roles: ['USER', 'MANAGER'] }
 },
 
   {
@@ -83,7 +84,12 @@ export const routes: Routes = [
     canActivate: [authGuard],
     data: { roles: ['ADMIN'] } // 👈 Solo visible para admin
   },
-  { path: 'register', component: RegisterComponent },
+ {
+  path: 'register',
+  loadComponent: () =>
+    import('./features/register/register.component')
+      .then(m => m.RegisterComponent)
+},
 
   { path: 'forbidden', component: ForbiddenComponent },
   { path: '**', component: Error404Component },

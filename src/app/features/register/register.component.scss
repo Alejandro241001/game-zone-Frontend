@@ -1,67 +1,61 @@
-/* Contenedor principal */
-.register-container {
+.register-wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 80vh;
-  background-color: #fff8e4; /* Fondo crema */
+  align-items: start;
+  padding-top: 6rem;
+  min-height: 100vh;
+  background-color: #fff8e4;
   font-family: 'Poppins', sans-serif;
 }
 
-/* Tarjeta del formulario */
-.register-card {
-  background-color: transparent;
-  padding: 2rem 3rem;
-  border-radius: 12px;
+/* Caja */
+.register-box {
+  background: #ffffffd0;
+  padding: 2.3rem 2.8rem;
+  border-radius: 10px;
   text-align: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Título */
-.register-card h2 {
-  font-size: 1.8rem;
+h2 {
+  font-size: 1.7rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: #1a1a1a;
+  margin-bottom: 1.6rem;
 }
 
-/* Campos de formulario */
-.register-card input[type="text"],
-.register-card input[type="email"],
-.register-card input[type="password"] {
+/* Inputs */
+.register-input {
   width: 100%;
   padding: 0.75rem;
   margin-bottom: 0.9rem;
+  border-radius: 6px;
   border: none;
-  border-radius: 8px;
-  background-color: #004257; /* Azul oscuro */
+  background: #003c4f; 
   color: #fff;
   font-size: 0.95rem;
   outline: none;
   text-align: center;
-  transition: background-color 0.3s ease;
 }
 
-.register-card input::placeholder {
-  color: #d1e3e8;
+.register-input::placeholder {
+  color: #cfe8ef;
 }
 
-.register-card input:focus {
-  background-color: #005a6d;
-}
-
-/* Botón de registro */
+/* Botón */
 .register-btn {
   width: 100%;
-  background-color: #ff914d; /* Naranja */
+  background-color: #ff914d;
   color: #000;
+  padding: 0.75rem;
   border: none;
   border-radius: 6px;
-  padding: 0.7rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  margin-top: 0.3rem;
+  transition: 0.2s ease all;
 }
 
 .register-btn:hover {
@@ -69,48 +63,25 @@
   transform: translateY(-2px);
 }
 
-/* Texto inferior */
-.register-footer {
-  margin-top: 1.2rem;
+/* Mensaje */
+.message {
+  margin-top: 1rem;
+  color: #444;
   font-size: 0.9rem;
-  color: #1a1a1a;
 }
 
-.register-footer a {
+/* Texto inferior */
+.login-text {
+  margin-top: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.login-link {
   font-weight: 600;
   color: #000;
   text-decoration: none;
 }
 
-.register-footer a:hover {
+.login-link:hover {
   text-decoration: underline;
-}
-
-/* Separador con línea */
-.divider {
-  border-top: 1px solid #ccc;
-  margin: 1.5rem 0;
-}
-
-/* Botón de Google */
-.google-btn {
-  width: 100%;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 0.6rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.google-btn:hover {
-  background-color: #f0f0f0;
-}
-
-.google-btn img {
-  width: 20px;
-  margin-right: 10px;
 }

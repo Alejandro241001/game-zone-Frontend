@@ -1,20 +1,19 @@
 <div class="container mt-4" *ngIf="!loading; else loadingTemplate">
-  
+
   <div *ngIf="error" class="alert alert-danger">
     {{ error }}
   </div>
 
   <div *ngIf="videogame" class="videogame-detail-card">
-    
+
     <div class="row align-items-center">
       <!-- Imagen del videojuego -->
       <div class="col-md-5 text-center">
-        <img
-          [src]="'http://localhost:8080/img/' + videogame.img"
-          [alt]="videogame.name"
-          class="img-fluid rounded shadow-sm mb-3 detail-image"
-        />
+        <img [src]="'http://localhost:8080/img/' + videogame.img" [alt]="videogame.name"
+          class="img-fluid rounded shadow-sm mb-3 detail-image" />
       </div>
+
+
 
       <!-- Información principal -->
       <div class="col-md-7">
@@ -38,6 +37,60 @@
             <input [(ngModel)]="videogame.releaseYear" type="number" class="form-control" />
           </div>
 
+
+          <!-- ============================= -->
+          <!-- 🎭 Selección de géneros -->
+          <!-- ============================= -->
+          <div class="mb-3">
+            <label class="form-label"><strong>Géneros:</strong></label>
+
+            <div class="d-flex gap-2">
+              <select class="form-select" [(ngModel)]="selectedGenreToAdd">
+                <option [ngValue]="null">Selecciona un género...</option>
+                <option *ngFor="let g of allGenres" [ngValue]="g">{{ g.name }}</option>
+              </select>
+
+              <button class="btn btn-primary" (click)="addGenre()">
+                ➕ Añadir
+              </button>
+            </div>
+
+            <!-- CHIPS -->
+            <div class="mt-2 d-flex flex-wrap gap-2">
+              <span *ngFor="let g of selectedGenres" class="badge bg-info text-dark p-2">
+                {{ g.name }}
+                <button class="btn-close btn-close-white ms-2" (click)="removeGenre(g)"></button>
+              </span>
+            </div>
+          </div>
+
+          <!-- ============================= -->
+          <!-- 💻 Selección de plataformas -->
+          <!-- ============================= -->
+          <div class="mb-3">
+            <label class="form-label"><strong>Plataformas:</strong></label>
+
+            <div class="d-flex gap-2">
+              <select class="form-select" [(ngModel)]="selectedPlatformToAdd">
+                <option [ngValue]="null">Selecciona una plataforma...</option>
+                <option *ngFor="let p of allPlatforms" [ngValue]="p">{{ p.name }}</option>
+              </select>
+
+              <button class="btn btn-primary" (click)="addPlatform()">
+                ➕ Añadir
+              </button>
+            </div>
+
+            <!-- CHIPS -->
+            <div class="mt-2 d-flex flex-wrap gap-2">
+              <span *ngFor="let p of selectedPlatforms" class="badge bg-warning text-dark p-2">
+                {{ p.name }}
+                <button class="btn-close btn-close-white ms-2" (click)="removePlatform(p)"></button>
+              </span>
+            </div>
+          </div>
+
+
           <div class="mb-3">
             <label class="form-label"><strong>Metacritic:</strong></label>
             <input [(ngModel)]="videogame.metacritic" type="number" class="form-control" />
@@ -52,7 +105,7 @@
           <p><strong>Estudio:</strong> {{ videogame.studio?.name }}</p>
           <p><strong>Año:</strong> {{ videogame.releaseYear }}</p>
           <p><strong>Metacritic:</strong> {{ videogame.metacritic }}</p>
-          
+
           <p><strong>Géneros:</strong>
             <span *ngFor="let genre of videogame.genres; let last = last">
               {{ genre.name }}<span *ngIf="!last">, </span>
@@ -91,64 +144,60 @@
       No hay reseñas todavía. ¡Sé el primero en opinar!
     </div>
 
-    
-    
-<!-- LISTA DE REVIEWS -->
-<div *ngFor="let r of reviews" class="card mb-3 shadow-sm">
-  <div class="card-body">
 
-    <!-- CABECERA -->
-    <div class="d-flex justify-content-between align-items-center">
-      <h5 class="card-title">{{ r.username }}</h5>
-      <span class="badge bg-primary fs-6">⭐ {{ r.rating }}/10</span>
-    </div>
 
-    <!-- ============================= -->
-    <!-- MODO EDICIÓN DE LA REVIEW -->
-    <!-- ============================= -->
-    <div *ngIf="editingReviewId === r.id; else viewMode">
+    <!-- LISTA DE REVIEWS -->
+    <div *ngFor="let r of reviews" class="card mb-3 shadow-sm">
+      <div class="card-body">
 
-      <!-- Texto -->
-      <textarea class="form-control mb-2"
-                [(ngModel)]="editReview.reviewText" 
-                rows="3"></textarea>
+        <!-- CABECERA -->
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title">{{ r.username }}</h5>
+          <span class="badge bg-primary fs-6">⭐ {{ r.rating }}/10</span>
+        </div>
 
-      <!-- Rating -->
-      <input type="number" class="form-control mb-3"
-             [(ngModel)]="editReview.rating"
-             min="0" max="10"/>
+        <!-- ============================= -->
+        <!-- MODO EDICIÓN DE LA REVIEW -->
+        <!-- ============================= -->
+        <div *ngIf="editingReviewId === r.id; else viewMode">
 
-      <!-- Botones edición -->
-      <button class="btn btn-success me-2" (click)="saveEditedReview(r.id)">
-        💾 Guardar
-      </button>
+          <!-- Texto -->
+          <textarea class="form-control mb-2" [(ngModel)]="editReview.reviewText" rows="3"></textarea>
 
-      <button class="btn btn-secondary" (click)="cancelEdit()">
-        Cancelar
-      </button>
-    </div>
+          <!-- Rating -->
+          <input type="number" class="form-control mb-3" [(ngModel)]="editReview.rating" min="0" max="10" />
 
-    <!-- ============================= -->
-    <!-- MODO NORMAL -->
-    <!-- ============================= -->
-    <ng-template #viewMode>
-      <p class="card-text mt-2">{{ r.reviewText || 'Sin comentario.' }}</p>
-      <p class="text-muted small">📅 {{ r.createdDate | date:'medium' }}</p>
+          <!-- Botones edición -->
+          <button class="btn btn-success me-2" (click)="saveEditedReview(r.id)">
+            💾 Guardar
+          </button>
 
-      <!-- BOTONES EDITAR / ELIMINAR -->
-      <div *ngIf="isCurrentUserOwner(r.userId) || isManager">
-        <button class="btn btn-warning btn-sm me-2" (click)="startEdit(r)">
-          ✏️ Editar
-        </button>
+          <button class="btn btn-secondary" (click)="cancelEdit()">
+            Cancelar
+          </button>
+        </div>
 
-        <button class="btn btn-danger btn-sm" (click)="deleteReview(r.id)">
-          🗑️ Eliminar
-        </button>
+        <!-- ============================= -->
+        <!-- MODO NORMAL -->
+        <!-- ============================= -->
+        <ng-template #viewMode>
+          <p class="card-text mt-2">{{ r.reviewText || 'Sin comentario.' }}</p>
+          <p class="text-muted small">📅 {{ r.createdDate | date:'medium' }}</p>
+
+          <!-- BOTONES EDITAR / ELIMINAR -->
+          <div *ngIf="isCurrentUserOwner(r.userId) || isManager">
+            <button class="btn btn-warning btn-sm me-2" (click)="startEdit(r)">
+              ✏️ Editar
+            </button>
+
+            <button class="btn btn-danger btn-sm" (click)="deleteReview(r.id)">
+              🗑️ Eliminar
+            </button>
+          </div>
+        </ng-template>
+
       </div>
-    </ng-template>
-
-  </div>
-</div>
+    </div>
 
 
 
@@ -163,12 +212,11 @@
       <form (ngSubmit)="submitReview()" #reviewForm="ngForm">
 
         <label class="form-label fw-bold">Puntuación (0-10):</label>
-        <input type="number" class="form-control mb-2" [(ngModel)]="newReview.rating"
-               name="rating" min="0" max="10" required />
+        <input type="number" class="form-control mb-2" [(ngModel)]="newReview.rating" name="rating" min="0" max="10"
+          required />
 
         <label class="form-label fw-bold">Comentario:</label>
-        <textarea class="form-control" rows="3"
-                  [(ngModel)]="newReview.reviewText" name="reviewText"></textarea>
+        <textarea class="form-control" rows="3" [(ngModel)]="newReview.reviewText" name="reviewText"></textarea>
 
         <button class="btn btn-success mt-3" [disabled]="!reviewForm.valid">
           ➕ Publicar reseña

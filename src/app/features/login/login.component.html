@@ -1,27 +1,42 @@
-<div class="login-container"> 
-<h2>Login</h2> 
-<form (ngSubmit)="onSubmit()" class="login-form"> 
-<div class="form-group"> 
-     <input 
-       type="text" 
-       placeholder="Usuario" 
-       [(ngModel)]="username" 
-       name="username" 
-       aria-label="Usuario" 
-       required 
-     /> 
-   </div> 
-   <div class="form-group"> 
-     <input 
-       type="password" 
-       placeholder="Contraseña" 
-       [(ngModel)]="password" 
-       aria-label="Contraseña" 
-       name="password" 
-       required 
-     /> 
-   </div> 
-   <button type="submit" class="login-button">Login</button> 
- </form> 
- <p *ngIf="error" class="error-message">{{ error }}</p> 
+<div class="login-wrapper">
+  <div class="login-box">
+
+    <h2>Iniciar Sesión</h2>
+
+    <form (ngSubmit)="onSubmit()">
+      
+      <!-- Usuario -->
+      <input
+        type="text"
+        placeholder="Nombre de usuario"
+        [(ngModel)]="username"
+        name="username"
+        required
+        class="login-input"
+      />
+
+      <!-- Contraseña -->
+      <input
+        type="password"
+        placeholder="Contraseña"
+        [(ngModel)]="password"
+        name="password"
+        required
+        class="login-input"
+      />
+
+      <!-- Botón -->
+      <button type="submit" class="login-btn">
+        Iniciar sesión
+      </button>
+
+      <!-- Error -->
+      <p *ngIf="error" class="error">{{ error }}</p>
+
+      <p class="register-text">
+  ¿Eres nuevo?
+  <a routerLink="/register" class="register-link">Regístrate aquí.</a>
+</p>
+    </form>
+  </div>
 </div>

@@ -19,6 +19,16 @@ export class VideogameDetailComponent implements OnInit {
   videogame: VideoGame | null = null;
   reviews: any[] = [];
 
+  allGenres: any[] = [];
+  allPlatforms: any[] = [];
+
+  selectedGenres: any[] = [];
+  selectedPlatforms: any[] = [];
+
+  selectedGenreToAdd: any = null;
+  selectedPlatformToAdd: any = null;
+
+
   error: string | null = null;
   loading = true;
 
@@ -49,11 +59,13 @@ export class VideogameDetailComponent implements OnInit {
     public authService: AuthService,
     private reviewService: ReviewService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isManager = this.authService.isManager();
     this.loadVideogameDetail();
+    this.loadGenres();
+    this.loadPlatforms();
   }
 
   get currentUserId(): number | null {
@@ -61,9 +73,9 @@ export class VideogameDetailComponent implements OnInit {
   }
 
   /** Verifica si la review pertenece al usuario logueado */
-isCurrentUserOwner(userId: number): boolean {
-  return this.currentUserId === userId;
-}
+  isCurrentUserOwner(userId: number): boolean {
+    return this.currentUserId === userId;
+  }
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedInSync();
@@ -94,6 +106,19 @@ isCurrentUserOwner(userId: number): boolean {
   loadReviews(videoGameId: number): void {
     this.reviewService.getReviewsByVideogame(videoGameId).subscribe({
       next: data => (this.reviews = data)
+    });
+  }
+
+
+  loadGenres(): void {
+    this.videogameDetailService.fetchGenres().subscribe({
+      next: data => this.allGenres = data
+    });
+  }
+
+  loadPlatforms(): void {
+    this.videogameDetailService.fetchPlatforms().subscribe({
+      next: data => this.allPlatforms = data
     });
   }
 
@@ -178,10 +203,18 @@ isCurrentUserOwner(userId: number): boolean {
 
   enableEdit(): void {
     this.editing = true;
+
+    if (this.videogame) {
+      this.selectedGenres = [...(this.videogame.genres || [])];
+      this.selectedPlatforms = [...(this.videogame.platforms || [])];
+    }
   }
 
   saveChanges(): void {
     if (!this.videogame) return;
+
+    this.videogame.genres = this.selectedGenres;
+    this.videogame.platforms = this.selectedPlatforms;
 
     this.videogameDetailService.updateVideogame(this.videogame.id, this.videogame).subscribe({
       next: updated => {
@@ -190,6 +223,29 @@ isCurrentUserOwner(userId: number): boolean {
       },
       error: () => (this.error = 'Error al actualizar el videojuego.')
     });
+  }
+
+
+  addGenre(): void {
+    if (this.selectedGenreToAdd && !this.selectedGenres.some(g => g.id === this.selectedGenreToAdd.id)) {
+      this.selectedGenres.push(this.selectedGenreToAdd);
+    }
+    this.selectedGenreToAdd = null; // reset select
+  }
+
+  addPlatform(): void {
+    if (this.selectedPlatformToAdd && !this.selectedPlatforms.some(p => p.id === this.selectedPlatformToAdd.id)) {
+      this.selectedPlatforms.push(this.selectedPlatformToAdd);
+    }
+    this.selectedPlatformToAdd = null;
+  }
+
+  removePlatform(platform: any): void {
+    this.selectedPlatforms = this.selectedPlatforms.filter(p => p.id !== platform.id);
+  }
+
+  removeGenre(genre: any): void {
+    this.selectedGenres = this.selectedGenres.filter(g => g.id !== genre.id);
   }
 
   deleteVideogame(): void {

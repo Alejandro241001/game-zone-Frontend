@@ -181,25 +181,25 @@
 }
 
  
-@media (max-width: 768px) { 
-  .nav-links { 
-    display: none; 
-    flex-direction: column; 
-    background-color: #FFF8E4; 
-    position: absolute; 
-    top: 60px; 
-    right: 0; 
-    width: 200px; 
-    padding: 10px; 
-    border-radius: 4px; 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
-  } 
- 
-  .nav-links.active { 
-    display: flex; 
-  } 
- 
-  .menu-toggle { 
-    display: block; 
-  } 
+@media (max-width: 768px) {
+
+  /* Fuerza que los elementos del menú no se peguen */
+  .nav-links {
+    gap: 12px !important;
+  }
+
+  .nav-links li a {
+    white-space: nowrap !important; /* evita que se partan las palabras */
+    font-size: 14px !important;
+  }
+
+  /* Si no usas menú hamburguesa, esto hace que los items se repartan */
+  .navigation {
+    flex-wrap: wrap !important;
+  }
+
+  .nav-links {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
 }

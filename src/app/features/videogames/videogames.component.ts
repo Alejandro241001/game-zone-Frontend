@@ -16,6 +16,13 @@ import { AuthService } from '../../core/services/auth.service';
 export class VideogamesComponent implements OnInit {
 
   videogames: VideoGame[] = [];
+  allGenres: any[] = [];
+allPlatforms: any[] = [];
+
+selectedGenre: any = null;
+selectedPlatform: any = null;
+
+filteredVideogames: VideoGame[] = [];
   error: string | null = null;
   isManager = false;
 
@@ -38,28 +45,51 @@ export class VideogamesComponent implements OnInit {
   ngOnInit(): void {
     this.isManager = this.authService.isManager();
     this.loadVideogames();
+    this.loadFiltersData();
   }
 
   /** 🔹 Cargar todos los videojuegos */
   loadVideogames(): void {
-    this.error = null;
+  this.error = null;
 
-    fetch(`${this.videogameService['apiUrl']}`)
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data.content)) {
-          this.videogames = data.content;
-        } else if (Array.isArray(data)) {
-          this.videogames = data;
-        } else {
-          this.error = '⚠️ Formato de respuesta de API inesperado.';
-        }
-      })
-      .catch(err => {
-        console.error('Error al cargar videojuegos:', err);
-        this.error = '❌ Error al cargar videojuegos desde la API.';
-      });
-  }
+  fetch(`${this.videogameService['apiUrl']}`)
+    .then(res => res.json())
+    .then(data => {
+      const games = Array.isArray(data.content) ? data.content : data;
+      this.videogames = games;
+      this.applyFilters();
+    })
+    .catch(err => {
+      this.error = '❌ Error al cargar videojuegos.';
+    });
+}
+
+  loadFiltersData(): void {
+  this.videogameService.fetchGenres().subscribe({
+    next: data => this.allGenres = data,
+    error: err => console.error("Error cargando géneros:", err)
+  });
+
+  this.videogameService.fetchPlatforms().subscribe({
+    next: data => this.allPlatforms = data,
+    error: err => console.error("Error cargando plataformas:", err)
+  });
+}
+
+applyFilters(): void {
+  this.filteredVideogames = this.videogames.filter(game => {
+
+    const matchGenre =
+      !this.selectedGenre ||
+      game.genres?.some((g: any) => g.id === this.selectedGenre.id);
+
+    const matchPlatform =
+      !this.selectedPlatform ||
+      game.platforms?.some((p: any) => p.id === this.selectedPlatform.id);
+
+    return matchGenre && matchPlatform;
+  });
+}
 
   /** 🖼️ Imagen por defecto si falla la original */
   onImageError(event: Event): void {

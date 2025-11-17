@@ -68,6 +68,8 @@ export class VideogameDetailService {
     return this.http.put<VideoGame>(`${this.apiUrl}/${id}`, gameDTO, { headers });
   }
 
+
+
   /** 🗑️ Eliminar videojuego */
   deleteVideogame(id: number): Observable<void> {
     const token = this.authService.getToken();

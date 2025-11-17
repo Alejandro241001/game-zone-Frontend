@@ -69,6 +69,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     (event.target as HTMLImageElement).src = 'assets/logo.png';
   }
 
+  menuOpen = false;
+
+toggleMenu() {
+  this.menuOpen = !this.menuOpen;
+}
+
+toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+}
+
   // ⭐ Aplicar clase CSS al body
   private applyDarkMode(): void {
     if (this.isDarkMode) {

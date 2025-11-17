@@ -1,16 +1,50 @@
-.lists-container {
-  max-width: 800px;
-  margin: auto;
-  padding: 30px;
+.lists-wrapper {
+  width: 100%;
+  max-width: 760px;  // solo se aplica en pantallas grandes
+  margin: 40px auto;
+  padding: 0 15px;
 }
 
-.create-section {
+@media (max-width: 768px) {
+  .lists-wrapper {
+    margin: 20px 0;     // sube el elemento en móvil
+    max-width: 100%;    // 💥 EVITA EL EFECTO "PÁGINA COMPRIMIDA"
+  }
+}
+.title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.create-box {
   display: flex;
-  flex-direction: column;
   gap: 10px;
+  background: #fff;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+
+  .input-create {
+    flex: 1;
+    border-radius: 10px;
+  }
+
+  .btn-create {
+    width: 180px;
+    border-radius: 10px;
+  }
 }
 
-.lists {
+.separator {
+  margin: 30px 0;
+  height: 2px;
+  width: 100%;
+  background: #e5e5e5;
+}
+
+.lists-grid {
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -19,17 +53,66 @@
 .list-card {
   background: #fff8e4;
   border-radius: 12px;
-  padding: 15px 20px;
+  padding: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 15px;
 
-  &:hover {
-    background: #ffeec1;
-    transition: 0.3s;
+  /* En móvil, vertical */
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 }
 
-.actions button {
-  border-radius: 8px;
+
+
+.list-info h4 {
+  font-size: 18px;
+}
+
+.list-info small {
+  font-size: 14px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+
+  button {
+    border-radius: 10px;
+  }
+}
+
+.create-list-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.create-list-box input {
+  width: 100%;
+  font-size: 16px;
+}
+
+.create-list-box button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    justify-content: flex-start;
+
+    button {
+      flex: 1; /* se estiran iguales */
+    }
+  }
 }

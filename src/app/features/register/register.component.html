@@ -1,41 +1,69 @@
-<div class="container mt-5">
-  <div class="col-md-6 offset-md-3">
-    <div class="card shadow p-4">
-      <h2 class="text-center mb-4">📝 Crear cuenta</h2>
+<div class="register-wrapper">
+  <div class="register-box">
 
-      <div *ngIf="message" class="alert alert-info text-center">{{ message }}</div>
+    <h2>Crear cuenta</h2>
 
-      <form (ngSubmit)="register()" #registerForm="ngForm">
-        <div class="mb-3">
-          <label class="form-label fw-bold">Nombre de usuario</label>
-          <input type="text" class="form-control" [(ngModel)]="user.username" name="username" required>
-        </div>
+    <form (ngSubmit)="register()" #registerForm="ngForm">
 
-        <div class="mb-3">
-          <label class="form-label fw-bold">Contraseña</label>
-          <input type="password" class="form-control" [(ngModel)]="user.password" name="password" required minlength="8">
-        </div>
+      <!-- Nombre de usuario -->
+      <input 
+        type="text" 
+        class="register-input"
+        placeholder="Nombre de usuario"
+        [(ngModel)]="user.username"
+        name="username"
+        required
+      />
 
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Nombre</label>
-            <input type="text" class="form-control" [(ngModel)]="user.firstName" name="firstName" required>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Apellido</label>
-            <input type="text" class="form-control" [(ngModel)]="user.lastName" name="lastName" required>
-          </div>
-        </div>
+      <!-- Contraseña -->
+      <input 
+        type="password"
+        class="register-input"
+        placeholder="Contraseña (mín. 8 caracteres)"
+        [(ngModel)]="user.password"
+        name="password"
+        required
+        minlength="8"
+      />
 
-        <button type="submit" class="btn btn-primary w-100" [disabled]="!registerForm.form.valid">
-          🧾 Crear cuenta
-        </button>
+      <!-- Nombre -->
+      <input 
+        type="text"
+        class="register-input"
+        placeholder="Nombre"
+        [(ngModel)]="user.firstName"
+        name="firstName"
+        required
+      />
 
-        <p class="text-center mt-3">
-          ¿Ya tienes una cuenta?
-          <a routerLink="/login" class="text-decoration-none">Inicia sesión aquí</a>
-        </p>
-      </form>
-    </div>
+      <!-- Apellido -->
+      <input 
+        type="text"
+        class="register-input"
+        placeholder="Apellido"
+        [(ngModel)]="user.lastName"
+        name="lastName"
+        required
+      />
+
+      <!-- Botón -->
+      <button 
+        type="submit" 
+        class="register-btn">
+        Crear cuenta
+      </button>
+
+      <!-- Mensaje -->
+      <p *ngIf="message" class="message">
+        {{ message }}
+      </p>
+
+      <!-- Link a login -->
+      <p class="login-text">
+        ¿Ya tienes una cuenta?
+        <a routerLink="/login" class="login-link">Inicia sesión aquí.</a>
+      </p>
+
+    </form>
   </div>
 </div>
