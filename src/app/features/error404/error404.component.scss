@@ -1,24 +1,32 @@
-.error404-container { 
-text-align: center; 
- margin-top: 50px; 
-} 
- 
-.error404-container h1 { 
- font-size: 2.5rem; 
- color: #d32f2f; 
-} 
- 
-.error404-container p { 
- font-size: 1.2rem; 
- color: #555; 
-} 
- 
-.error404-container a { 
- text-decoration: none; 
- color: #1976d2; 
- font-weight: bold; 
-} 
- 
-.error404-container a:hover { 
- color: #1565c0; 
+.error404-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* Centra verticalmente */
+    align-items: center;       /* Centra horizontalmente */
+    height: 70vh;              /* Ocupa la mayor parte de la pantalla */
+    text-align: center;
+}
+
+.error404-container h1 {
+    font-size: 2.5rem;
+    color: #d32f2f;
+    margin-bottom: 10px;
+}
+
+.error404-container p {
+    font-size: 1.2rem;
+    color: #555;
+    max-width: 600px;
+}
+
+.error404-container a {
+    margin-top: 15px;
+    text-decoration: none;
+    color: #1976d2;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.error404-container a:hover {
+    color: #1565c0;
 }

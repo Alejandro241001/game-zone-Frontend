@@ -112,3 +112,151 @@ html {
 @import 'bootstrap/scss/bootstrap'; 
 
 /* Puedes añadir más estilos de utilidad global aquí si lo necesitas */
+
+/* ========================= */
+/* 🌙 LOGIN — MODO OSCURO    */
+/* ========================= */
+body.dark-mode .login-wrapper {
+    background: #121212 !important;
+}
+
+body.dark-mode .login-box {
+    background: #1e1e1e !important;
+    color: #fff !important;
+}
+
+/* Inputs en modo oscuro */
+body.dark-mode .login-input {
+    background: #2a2a2a !important;
+    color: #fff !important;
+}
+
+body.dark-mode .login-input::placeholder {
+    color: #bfbfbf !important;
+}
+
+/* Textos */
+body.dark-mode .login-box h2,
+body.dark-mode .register,
+body.dark-mode .register a {
+    color: #fff !important;
+}
+
+/* ========================= */
+/* 🌙 REGISTER — MODO OSCURO */
+/* ========================= */
+
+/* Fondo general */
+body.dark-mode .register-wrapper {
+  background-color: #121212 !important;
+}
+
+/* Caja */
+body.dark-mode .register-box {
+  background-color: #1e1e1e !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Inputs */
+body.dark-mode .register-input {
+  background: #2a2a2a !important;
+  color: #fff !important;
+}
+
+body.dark-mode .register-input::placeholder {
+  color: #bfbfbf !important;
+}
+
+/* Botón */
+body.dark-mode .register-btn {
+  background-color: #ff914d !important;
+  color: #000 !important;
+}
+
+body.dark-mode .register-btn:hover {
+  background-color: #ff7a29 !important;
+}
+
+/* Textos */
+body.dark-mode .message,
+body.dark-mode .login-text,
+body.dark-mode .login-link {
+  color: #ffffff !important;
+}
+
+
+
+/* ========================= */
+/* 🌙 LISTAS — MODO OSCURO   */
+/* ========================= */
+
+/* Caja donde se crea la lista */
+body.dark-mode .create-box {
+  background: #1e1e1e !important;
+  border: 1px solid #444 !important;
+}
+
+/* Input */
+body.dark-mode .create-box .input-create {
+  background: #2a2a2a !important;
+  color: #fff !important;
+  border-color: #555 !important;
+}
+
+/* Placeholder */
+body.dark-mode .create-box .input-create::placeholder {
+  color: #bfbfbf !important;
+}
+
+/* Botón "Crear lista" */
+body.dark-mode .create-box .btn-create {
+  background-color: #2e7d32 !important; /* verde más oscuro */
+  color: white !important;
+}
+
+body.dark-mode .create-box .btn-create:hover {
+  background-color: #256628 !important;
+}
+
+/* Separador */
+body.dark-mode .separator {
+  background: #444 !important;
+}
+
+/* Tarjetas de lista */
+body.dark-mode .list-card {
+  background: #1e1e1e !important;
+  color: #fff !important;
+  border: 1px solid #333 !important;
+}
+
+/* Texto */
+body.dark-mode .list-info h4,
+body.dark-mode .list-info small {
+  color: #fff !important;
+}
+
+
+
+/* ========================= */
+/* 🌙 ESTUDIOS — MODO OSCURO */
+/* ========================= */
+
+body.dark-mode .card-studio {
+    background-color: #1e1e1e !important;
+    color: #fff !important;
+    border: 1px solid #333 !important;
+}
+
+/* La imagen mantiene fondo blanco */
+body.dark-mode .card-studio .card-img-top {
+    background-color: #ffffff !important;
+}
+
+/* El texto del país */
+body.dark-mode .card-studio small,
+body.dark-mode .card-studio span,
+body.dark-mode .card-studio .country-name {
+    color: #ccc !important;
+}

@@ -1,31 +1,32 @@
-.forbidden-container { 
- text-align: center; 
- margin-top: 50px; 
-} 
- 
-.forbidden-container h1 { 
- font-size: 2.5rem; 
- color: #d32f2f; 
-} 
- 
-.forbidden-container p { 
- font-size: 1.2rem; 
- color: #555; 
-} 
- 
-.forbidden-container a { 
- text-decoration: none; 
- color: #1976d2; 
- font-weight: bold; 
-} 
- 
-.forbidden-container a:hover { 
- color: #1565c0; 
-} 
+.forbidden-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* Centra verticalmente */
+    align-items: center;       /* Centra horizontalmente */
+    height: 70vh;              /* Ocupa la mayor parte de la pantalla */
+    text-align: center;
+}
 
-.forbidden-container { 
-    text-align: center; 
-    margin-top: 50px; 
-    /* Opcional: Centrar en la pantalla. Puedes usar padding-top o margin-top */
-    /* margin-top: 20vh; */
+.forbidden-container h1 {
+    font-size: 2.5rem;
+    color: #d32f2f;
+    margin-bottom: 10px;
+}
+
+.forbidden-container p {
+    font-size: 1.2rem;
+    color: #555;
+    max-width: 600px;
+}
+
+.forbidden-container a {
+    margin-top: 15px;
+    text-decoration: none;
+    color: #1976d2;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.forbidden-container a:hover {
+    color: #1565c0;
 }
