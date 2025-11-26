@@ -21,10 +21,10 @@
 .create-box {
   display: flex;
   gap: 10px;
-  background: #fff;
+  background: #023A52;
   padding: 18px;
   border-radius: 12px;
-  border: 1px solid #eaeaea;
+  border: 1px solid #023A52;
 
   .input-create {
     flex: 1;
@@ -51,10 +51,11 @@
 }
 
 .list-card {
-  background: #fff8e4;
+  background: #023A52;
   border-radius: 12px;
   padding: 15px;
   display: flex;
+    color: #ffffff; 
   justify-content: space-between;
   align-items: center;
   margin-top: 15px;
@@ -67,6 +68,13 @@
   }
 }
 
+
+.list-card small,
+.list-card i,
+.list-card svg {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
 
 
 .list-info h4 {
